@@ -174,5 +174,45 @@ export async function refreshToken(req, res) {
   res.json({ message: "Access Token refreshed successfully", accessToken });
 }
 
+export async function logout(req, res) {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
+  const refreshTokenHash = crypto
+    .createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+  const session = await prisma.session.findFirst({
+    where: { refreshTokenHash, revoked: false },
+  });
 
+  if (!session) {
+    return res.status(401).json({ message: "Invalid refresh token" });
+  }
 
+  await prisma.session.update({
+    where: { id: session.id },
+    data: { revoked: true },
+  });
+  res.clearCookie("refreshToken");
+  res.json({
+    message: "Logged out successfully",
+  });
+}
+
+export async function logoutAll(req, res) {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
+  const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
+  await prisma.session.updateMany({
+    where: { userId: decoded.id, revoked: false },
+    data: { revoked: true },
+  });
+  res.clearCookie("refreshToken");
+  res.json({
+    message: "Logged out of all sessions successfully",
+  });
+}
