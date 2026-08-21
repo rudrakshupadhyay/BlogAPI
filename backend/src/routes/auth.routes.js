@@ -7,4 +7,21 @@ post /api/auth/register;
 */
 authRouter.post("/register", authController.registerUser);
 
+/*
+post /api/auth/login;
+*/
+authRouter.post("/login", authController.login);
+
+/*
+get /api/auth/get-me;
+*/
+authRouter.get("/get-me", authController.getMe);
+
+/*
+get /api/auth/refresh-token;
+*/
+authRouter.get("/refresh-token", authController.refreshToken);
+
+
+
 export default authRouter;

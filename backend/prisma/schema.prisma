@@ -19,6 +19,7 @@ model User {
   password String
   roles    String @default("reader")
   sessions Session[]
+  @@index([username])
 }
 
 model Session {
@@ -30,6 +31,7 @@ model Session {
   revoked          Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-
+  @@index([userId])
+  @@index([refreshTokenHash])
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
