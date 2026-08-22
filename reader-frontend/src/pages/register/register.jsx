@@ -1,7 +1,7 @@
 import style from "./Register.module.css";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
-
+import { useAuth } from "../../context/AuthContext.jsx";
 function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -9,6 +9,9 @@ function RegisterPage() {
     password: "",
   });
   const [error, setError] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const { register } = useAuth();
+  const navigate = useNavigate();
   function handleInputChange(e) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -19,38 +22,28 @@ function RegisterPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    if (submitting) return;
+    setError([]);
+    setSubmitting(true);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      console.log(data);
-
-      if (!response.ok) {
-        console.log("Registration failed");
-        setError(data.errors || ["Registration failed"]);
-        return;
-      }
-
+      await register(formData.name, formData.username, formData.password);
       console.log("Registration successful");
+      navigate("/");
     } catch (error) {
-      setError([
-        "An error occurred during registration. Please try again later.",
-      ]);
-      console.error("Error:", error);
+      setError(
+        error.errors || [
+          {
+            msg: error.message || "Registration failed",
+          },
+        ],
+      );
+    } finally {
+      setSubmitting(false);
     }
   }
   return (
     <div className={style.registerPage}>
-      {error && (
+      {error.length > 0 && (
         <div className={style.error}>
           <ul className={style.errorList}>
             {error.map((err, index) => (
@@ -110,9 +103,13 @@ function RegisterPage() {
               Login here.
             </Link>
           </div>
-          <button type="submit" className={style.registerButton}>
-            Register
-          </button>
+          <button
+            type="submit"
+            className={style.registerButton}
+            disabled={submitting}
+          >
+            {submitting ? "Registering..." : "Register"}
+          </button>{" "}
         </form>
       </div>
     </div>

@@ -1,22 +1,24 @@
 import App from "./App";
 import ErrorPage from "./components/ErrorPage";
 import RegisterPage from "./pages/register/register";
+import LoginPage from "./pages/login/login";
 
 const routes = [
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
   },
   {
     path: "/register",
     element: <RegisterPage />,
-    errorElement: <ErrorPage />,
   },
   {
     path: "/login",
-    element: <div>Login Page</div>,
-    errorElement: <ErrorPage />,
+    element: <LoginPage />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ];
 
