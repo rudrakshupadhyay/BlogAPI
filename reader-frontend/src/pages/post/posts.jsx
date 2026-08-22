@@ -1,5 +1,6 @@
 import Header from "../../components/header/header";
 import { useEffect, useState } from "react";
+import styles from "./posts.module.css";
 
 function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -43,42 +44,52 @@ function PostsPage() {
   function handlePrevious() {
     setPage((prevPage) => prevPage - 1);
   }
-
+  function handlePostClick(postId) {
+    // Navigate to the post detail page
+    console.log(`Navigating to post with ID: ${postId}`);
+  }
   function handleNext() {
     setPage((prevPage) => prevPage + 1);
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       <Header />
 
-      <main>
-        <section>
+      <main className={styles.main}>
+        <section className={styles.postsSection}>
           {loading ? (
             <p>Loading posts...</p>
           ) : error ? (
             <p>Error fetching posts: {error}</p>
           ) : (
-            <>
-              <div>
+            <div className={styles.innerMain}>
+              <div className={styles.postsContainer}>
                 {posts.map((post) => (
-                  <div key={post.id}>
-                    <h2>{post.title}</h2>
-
+                  <div key={post.id} className={styles.post} onClick={() => handlePostClick(post.id)}>
+                    <div className={styles.postTitle}><b>Title:</b> {post.title}</div>
                     <div>
-                      <i>{post.publishedAt}</i>
+                      <div>
+                        <i>
+                          {" "}
+                          {new Date(post.publishedAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
+                        </i>
+                      </div>
+                      <div>By: {post.author.name}</div>
                     </div>
-
-                    <div>By: {post.author.name}</div>
                   </div>
                 ))}
               </div>
 
-              <footer>
-                <button
-                  onClick={handlePrevious}
-                  disabled={page === 1}
-                >
+              <footer className={styles.pagination}>
+                <button onClick={handlePrevious} disabled={page === 1} className={styles.paginationButton}>
                   Previous
                 </button>
 
@@ -90,20 +101,18 @@ function PostsPage() {
                       key={pageNumber}
                       onClick={() => setPage(pageNumber)}
                       disabled={page === pageNumber}
+                      className={styles.paginationButtonNumber}
                     >
                       {pageNumber}
                     </button>
                   );
                 })}
 
-                <button
-                  onClick={handleNext}
-                  disabled={page === totalPages}
-                >
+                <button onClick={handleNext} disabled={page === totalPages} className={styles.paginationButton}>
                   Next
                 </button>
               </footer>
-            </>
+            </div>
           )}
         </section>
       </main>
