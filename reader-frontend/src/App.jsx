@@ -1,4 +1,5 @@
 import { useAuth } from "./context/AuthContext";
+import Header from "./components/header/header";
 function App() {
   const { user, logout } = useAuth();
   function handleLogout() {
@@ -10,10 +11,8 @@ function App() {
   }
   return (
     <div>
+      <Header />
       <div>Hello, {user ? user.name : "World"}!</div>
-      <div>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
     </div>
   );
 }

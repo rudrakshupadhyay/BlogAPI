@@ -18,6 +18,14 @@ export async function getPublishedPosts(req, res) {
         orderBy: {
           publishedAt: "desc",
         },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+            }
+          },
+        }
       }),
 
       prisma.post.count({

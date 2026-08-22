@@ -1,0 +1,78 @@
+.header {
+  background-color: #eaf2ff;
+  padding: 10px 20px;
+}
+
+.siteTitle {
+  color: #172b4d;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  font-family: Georgia, serif;
+}
+
+.container {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.active {
+  background-color: #0052cc;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e6;
+}
+
+.navLinks {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.navLink {
+  background-color: #ffffff;
+  text-decoration: none;
+  color: #172b4d;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid #dfe1e6;
+}
+
+.navLink:hover {
+  background-color: #f4f5f7;
+  border-color: #c1c7d0;
+}
+
+.loginLink {
+  background-color: rgb(2, 137, 2);
+  color: #ffffff;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.loginLink:hover {
+  background-color: rgb(2, 100, 2);
+}
+
+.logout {
+  background-color: #ff4d4f;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: #d9363e;
+}
