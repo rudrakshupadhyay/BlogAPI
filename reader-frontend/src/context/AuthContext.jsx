@@ -5,8 +5,8 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
-  const [loading, setloading] = useState(true);
-  
+  const [loading, setLoading] = useState(true);
+
   async function login(username, password) {
     const response = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
@@ -90,26 +90,23 @@ export function AuthProvider({ children }) {
         setUser(null);
         setAccessToken(null);
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     }
     restoreAuth();
   }, []);
 
   async function logout() {
-    try {
-      const response = await fetch("http://localhost:3000/api/auth/logout", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to logout");
-      }
-      setUser(null);
-      setAccessToken(null);
-    } catch (error) {
-      console.error("Error occurred while logging out:", error);
+    const response = await fetch("http://localhost:3000/api/auth/logout", {
+      method: "GET",
+      credentials: "include",
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to logout");
     }
+    setUser(null);
+    setAccessToken(null);
   }
   return (
     <AuthContext.Provider
