@@ -1,6 +1,7 @@
 import Header from "../../components/header/header";
 import { useEffect, useState } from "react";
 import styles from "./posts.module.css";
+import configuration from "../../utils/configuration.js";
 
 function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -16,7 +17,7 @@ function PostsPage() {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/api/posts?page=${page}&limit=10`,
+          `${configuration.API_URL}/api/posts?page=${page}&limit=${configuration.PAGE_LIMIT}`,
           {
             method: "GET",
           },

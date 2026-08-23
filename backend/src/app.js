@@ -3,11 +3,12 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
 import postRouter from "./routes/post.routes.js";
 import cors from "cors";
+import config from "./config/config.js";
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: config.ORIGIN,
     credentials: true,
   }),
 );

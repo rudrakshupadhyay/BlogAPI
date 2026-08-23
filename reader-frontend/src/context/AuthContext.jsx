@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import configuration from "../utils/configuration.js";
 
 const AuthContext = createContext(null);
 
@@ -8,7 +9,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   async function login(username, password) {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
+    const response = await fetch(`${configuration.API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +28,7 @@ export function AuthProvider({ children }) {
   }
 
   async function register(name, username, password) {
-    const response = await fetch("http://localhost:3000/api/auth/register", {
+    const response = await fetch(`${configuration.API_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +57,7 @@ export function AuthProvider({ children }) {
 
   async function refreshAccessToken() {
     const response = await fetch(
-      "http://localhost:3000/api/auth/refresh-token",
+      `${configuration.API_URL}/api/auth/refresh-token`,
       {
         method: "GET",
         credentials: "include",
@@ -74,7 +75,7 @@ export function AuthProvider({ children }) {
     async function restoreAuth() {
       try {
         const token = await refreshAccessToken();
-        const response = await fetch("http://localhost:3000/api/auth/get-me", {
+        const response = await fetch(`${configuration.API_URL}/api/auth/get-me`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -97,7 +98,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function logout() {
-    const response = await fetch("http://localhost:3000/api/auth/logout", {
+    const response = await fetch(`${configuration.API_URL}/api/auth/logout`, {
       method: "GET",
       credentials: "include",
     });
