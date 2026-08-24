@@ -1,0 +1,19 @@
+.searchBar{
+    background-color: inherit;
+    display: flex;
+    gap: 0.5rem;
+}
+.searchInput {
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+.searchButton {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}

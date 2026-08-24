@@ -8,11 +8,21 @@ export async function getPublishedPosts(req, res) {
 
     const skip = (page - 1) * limit;
 
+    const search = req.query.search?.trim();
+    
+    const where = {
+      published: true,
+    };
+
+    if (search) {
+      where.title = {
+        contains: search,
+      };
+    }
+
     const [posts, totalPosts] = await Promise.all([
       prisma.post.findMany({
-        where: {
-          published: true,
-        },
+        where,
         skip,
         take: limit,
         orderBy: {
@@ -23,18 +33,15 @@ export async function getPublishedPosts(req, res) {
             select: {
               id: true,
               name: true,
-            }
+            },
           },
-        }
+        },
       }),
 
       prisma.post.count({
-        where: {
-          published: true,
-        },
+        where,
       }),
     ]);
-
     const totalPages = Math.ceil(totalPosts / limit);
 
     res.status(200).json({

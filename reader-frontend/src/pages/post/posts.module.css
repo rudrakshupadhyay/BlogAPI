@@ -8,9 +8,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
 }
 .postsSection {
-  padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;

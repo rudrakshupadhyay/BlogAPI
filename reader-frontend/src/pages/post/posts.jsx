@@ -2,6 +2,7 @@ import Header from "../../components/header/header";
 import { useEffect, useState } from "react";
 import styles from "./posts.module.css";
 import configuration from "../../utils/configuration.js";
+import SearchBar from "../../components/searchBar/searchBar.jsx";
 
 function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -9,6 +10,7 @@ function PostsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchPosts() {
@@ -16,8 +18,17 @@ function PostsPage() {
       setError(null);
 
       try {
+        const queryParams = new URLSearchParams({
+          page,
+          limit: 10,
+        });
+
+        if (searchQuery.trim()) {
+          queryParams.append("search", searchQuery);
+        }
+
         const response = await fetch(
-          `${configuration.API_URL}/api/posts?page=${page}&limit=${configuration.PAGE_LIMIT}`,
+          `${configuration.API_URL}/api/posts?${queryParams.toString()}`,
           {
             method: "GET",
           },
@@ -40,24 +51,31 @@ function PostsPage() {
     }
 
     fetchPosts();
-  }, [page]);
+  }, [page, searchQuery]);
 
   function handlePrevious() {
     setPage((prevPage) => prevPage - 1);
   }
+
   function handlePostClick(postId) {
     // Navigate to the post detail page
     console.log(`Navigating to post with ID: ${postId}`);
   }
+
   function handleNext() {
     setPage((prevPage) => prevPage + 1);
+  }
+
+  function handleSearch(query) {
+    setSearchQuery(query);
+    setPage(1); // Reset to the first page when a new search is performed
   }
 
   return (
     <div className={styles.page}>
       <Header />
-
       <main className={styles.main}>
+        <SearchBar handleSearch={handleSearch} />
         <section className={styles.postsSection}>
           {loading ? (
             <p>Loading posts...</p>
@@ -67,8 +85,14 @@ function PostsPage() {
             <div className={styles.innerMain}>
               <div className={styles.postsContainer}>
                 {posts.map((post) => (
-                  <div key={post.id} className={styles.post} onClick={() => handlePostClick(post.id)}>
-                    <div className={styles.postTitle}><b>Title:</b> {post.title}</div>
+                  <div
+                    key={post.id}
+                    className={styles.post}
+                    onClick={() => handlePostClick(post.id)}
+                  >
+                    <div className={styles.postTitle}>
+                      <b>Title:</b> {post.title}
+                    </div>
                     <div>
                       <div>
                         <i>
@@ -90,7 +114,11 @@ function PostsPage() {
               </div>
 
               <footer className={styles.pagination}>
-                <button onClick={handlePrevious} disabled={page === 1} className={styles.paginationButton}>
+                <button
+                  onClick={handlePrevious}
+                  disabled={page === 1}
+                  className={styles.paginationButton}
+                >
                   Previous
                 </button>
 
@@ -109,7 +137,11 @@ function PostsPage() {
                   );
                 })}
 
-                <button onClick={handleNext} disabled={page === totalPages} className={styles.paginationButton}>
+                <button
+                  onClick={handleNext}
+                  disabled={page === totalPages}
+                  className={styles.paginationButton}
+                >
                   Next
                 </button>
               </footer>
