@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import configuration from "../utils/configuration.js";
 
 const AuthContext = createContext(null);
-
+let refreshpromise = null;
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
@@ -56,32 +56,43 @@ export function AuthProvider({ children }) {
   }
 
   async function refreshAccessToken() {
-    const response = await fetch(
-      `${configuration.API_URL}/api/auth/refresh-token`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to refresh access token");
+    if (refreshpromise) {
+      return refreshpromise;
     }
-    setAccessToken(data.accessToken);
-    return data.accessToken;
+
+    refreshpromise = fetch(`${configuration.API_URL}/api/auth/refresh-token`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to refresh access token");
+        }
+        setAccessToken(data.accessToken);
+        return data.accessToken;
+      })
+      .finally(() => {
+        refreshpromise = null;
+      });
+
+    return refreshpromise;
   }
 
   useEffect(() => {
     async function restoreAuth() {
       try {
         const token = await refreshAccessToken();
-        const response = await fetch(`${configuration.API_URL}/api/auth/get-me`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `${configuration.API_URL}/api/auth/get-me`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
           },
-          credentials: "include",
-        });
+        );
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data.message || "Unable to get user data");
