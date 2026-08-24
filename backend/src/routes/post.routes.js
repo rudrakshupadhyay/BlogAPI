@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as postController from "../controllers/post.controllers.js";
+import { authenticate } from "../middleware/authenticate.middleware.js";
 
 const postRouter = Router();
 /*
@@ -9,6 +10,6 @@ postRouter.get("/", postController.getPublishedPosts);
 /*
 GET /api/posts/:slug
 */
-postRouter.get("/:slug", postController.getPostBySlug);
+postRouter.get("/:slug", authenticate, postController.getPostBySlug);
 
 export default postRouter;
