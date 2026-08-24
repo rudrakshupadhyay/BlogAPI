@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./posts.module.css";
 import configuration from "../../utils/configuration.js";
 import SearchBar from "../../components/searchBar/searchBar.jsx";
+import { Link } from "react-router";
 
 function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -85,27 +86,29 @@ function PostsPage() {
             <div className={styles.innerMain}>
               <div className={styles.postsContainer}>
                 {posts.map((post) => (
-                  <div
+                  <Link
+                    to={`/post/${post.slug}`}
                     key={post.id}
-                    className={styles.post}
-                    onClick={() => handlePostClick(post.id)}
+                    className={styles.postLink}
                   >
-                    <div className={styles.postTitle}>{post.title}</div>
-                    <div className={styles.metaInfo}>
-                      <div>
-                        {" "}
-                        {new Date(post.publishedAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
+                    <div className={styles.post}>
+                      <div className={styles.postTitle}>{post.title}</div>
+                      <div className={styles.metaInfo}>
+                        <div>
+                          {" "}
+                          {new Date(post.publishedAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
+                        </div>
+                        <div>{post.author.name}</div>
                       </div>
-                      <div>{post.author.name}</div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
 

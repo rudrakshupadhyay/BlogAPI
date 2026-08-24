@@ -9,7 +9,7 @@ export async function getPublishedPosts(req, res) {
     const skip = (page - 1) * limit;
 
     const search = req.query.search?.trim();
-    
+
     const where = {
       published: true,
     };
@@ -60,6 +60,43 @@ export async function getPublishedPosts(req, res) {
 
     res.status(500).json({
       message: "Failed to fetch posts",
+    });
+  }
+}
+
+export async function getPostBySlug(req, res) {
+  try {
+    const { slug } = req.params;
+
+    const post = await prisma.post.findUnique({
+      where: {
+        slug: slug,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        comments: true,
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
+    res.status(200).json({
+      post,
+    });
+  } catch (error) {
+    console.error("Error fetching post by slug:", error);
+
+    res.status(500).json({
+      message: "Failed to fetch post",
     });
   }
 }
