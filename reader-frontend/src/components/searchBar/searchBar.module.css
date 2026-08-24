@@ -17,3 +17,11 @@
     cursor: pointer;
     border-radius: 4px;
 }
+
+.searchButton:hover {
+    background-color: #2563eb;
+}
+
+.searchButton:active {
+    background-color: #1e40af;
+}

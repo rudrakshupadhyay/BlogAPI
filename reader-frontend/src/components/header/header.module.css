@@ -5,10 +5,11 @@
 
 .siteTitle {
   color: #172b4d;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
   text-align: center;
-  font-family: Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -1px;
 }
 
 .container {

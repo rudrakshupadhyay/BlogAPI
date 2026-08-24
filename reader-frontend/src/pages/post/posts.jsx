@@ -90,24 +90,20 @@ function PostsPage() {
                     className={styles.post}
                     onClick={() => handlePostClick(post.id)}
                   >
-                    <div className={styles.postTitle}>
-                      <b>Title:</b> {post.title}
-                    </div>
-                    <div>
+                    <div className={styles.postTitle}>{post.title}</div>
+                    <div className={styles.metaInfo}>
                       <div>
-                        <i>
-                          {" "}
-                          {new Date(post.publishedAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
-                        </i>
+                        {" "}
+                        {new Date(post.publishedAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )}
                       </div>
-                      <div>By: {post.author.name}</div>
+                      <div>{post.author.name}</div>
                     </div>
                   </div>
                 ))}
