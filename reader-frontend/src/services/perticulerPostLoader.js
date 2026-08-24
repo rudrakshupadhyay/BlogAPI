@@ -1,6 +1,6 @@
 import configuration from "../utils/configuration.js";
 
-async function getParticularPost({ slug, accessToken, refreshAccessToken }) {
+async function getParticularPost({ slug, accessToken }) {
   try {
     const response = await fetch(`${configuration.API_URL}/api/posts/${slug}`, {
       method: "GET",
@@ -9,35 +9,15 @@ async function getParticularPost({ slug, accessToken, refreshAccessToken }) {
       },
     });
 
-    if (response.ok) {
-      return await response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      const error = new Error(data.message || "Failed to fetch post");
+      error.status = response.status;
+      throw error;
     }
 
-    if (response.status !== 401) {
-      const error = await response.json();
-
-      throw new Error(error.message || "Unable to fetch post");
-    }
-
-    const refreshedToken = await refreshAccessToken();
-
-    const retryResponse = await fetch(
-      `${configuration.API_URL}/api/posts/${slug}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${refreshedToken}`,
-        },
-      },
-    );
-
-    const retryPost = await retryResponse.json();
-
-    if (!retryResponse.ok) {
-      throw new Error(retryPost.message || "Unable to fetch post");
-    }
-
-    return retryPost;
+    return data;
   } catch (err) {
     console.error("Error fetching post:", err);
     throw err;

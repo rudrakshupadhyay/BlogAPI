@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import configuration from "../utils/configuration.js";
 
 const AuthContext = createContext(null);
@@ -55,7 +61,7 @@ export function AuthProvider({ children }) {
     return data;
   }
 
-  async function refreshAccessToken() {
+  const refreshAccessToken = useCallback(async () => {
     if (refreshpromise) {
       return refreshpromise;
     }
@@ -77,7 +83,7 @@ export function AuthProvider({ children }) {
       });
 
     return refreshpromise;
-  }
+  }, []);
 
   useEffect(() => {
     async function restoreAuth() {
@@ -106,7 +112,7 @@ export function AuthProvider({ children }) {
       }
     }
     restoreAuth();
-  }, []);
+  }, [refreshAccessToken]);
 
   async function logout() {
     const response = await fetch(`${configuration.API_URL}/api/auth/logout`, {

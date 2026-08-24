@@ -1,40 +1,50 @@
 import getParticularPost from "../../services/perticulerPostLoader.js";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import Header from "../../components/header/header.jsx";
-import { Link } from "react-router";
+
 
 function PerticularPost() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
-  const { accessToken, refreshAccessToken } = useAuth();
+  const { loading, accessToken, refreshAccessToken, user } = useAuth();
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(true);
 
   useEffect(() => {
+    if (loading) return;
     const fetchPost = async () => {
-      setLoading(true);
+      setPostLoading(true);
+      setError(null);
       try {
         const post = await getParticularPost({
           slug,
           accessToken,
-          refreshAccessToken,
         });
         if (!post) {
           throw new Error("Post not found");
         }
         setPost(post);
       } catch (error) {
+        if (error.status === 401) {
+          try {
+            await refreshAccessToken();
+          } catch (refreshError) {
+            console.error("Session expired:", refreshError);
+            setError(refreshError);
+          }
+          return;
+        }
         console.error("Error fetching post:", error);
         setError(error);
       } finally {
-        setLoading(false);
+        setPostLoading(false);
       }
     };
 
     fetchPost();
-  }, [slug]);
+  }, [slug, loading, accessToken, refreshAccessToken]);
 
   return (
     <div>
@@ -42,9 +52,14 @@ function PerticularPost() {
       {error ? (
         <div>
           <div>Error: {error.message}</div>
-          <Link to="/login">Login</Link>
+          {!user && (
+            <div>
+              <p>You need to be logged in to view this post.</p>
+              <Link to="/login">Go to Login</Link>
+            </div>
+          )}
         </div>
-      ) : loading ? (
+      ) : postLoading ? (
         <div>Loading...</div>
       ) : (
         <div>
