@@ -3,7 +3,41 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useParams, Link } from "react-router";
 import Header from "../../components/header/header.jsx";
+import styles from "./perticularPost.module.css";
 
+function PostUI({ post }) {
+  return (
+    <main className={styles.post}>
+      <section className={styles.postCard}>
+        <div>
+          <Link to="/posts" className={styles.backLink}>
+            &larr; Back to Posts
+          </Link>
+        </div>
+        <div className={styles.postMetaData}>
+          <h2 className={styles.postTitle}>{post.title}</h2>
+          <div className={styles.postDetails}>
+            <div className={styles.postAuthor}>
+              By:{" "}
+              <span className={styles.postAuthorName}>{post.author.name}</span>
+            </div>
+            <div className={styles.postDate}>
+              &bull; Published on:{" "}
+              {new Date(post.publishedAt).toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+        <div
+          className={styles.postContent}
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        ></div>
+      </section>
+      <footer className={styles.postFooter}>
+        <div> this is footer content</div>
+      </footer>
+    </main>
+  );
+}
 
 function PerticularPost() {
   const { slug } = useParams();
@@ -18,14 +52,14 @@ function PerticularPost() {
       setPostLoading(true);
       setError(null);
       try {
-        const post = await getParticularPost({
+        const data = await getParticularPost({
           slug,
           accessToken,
         });
-        if (!post) {
+        if (!data) {
           throw new Error("Post not found");
         }
-        setPost(post);
+        setPost(data.post);
       } catch (error) {
         if (error.status === 401) {
           try {
@@ -47,7 +81,7 @@ function PerticularPost() {
   }, [slug, loading, accessToken, refreshAccessToken]);
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <Header />
       {error ? (
         <div>
@@ -62,10 +96,7 @@ function PerticularPost() {
       ) : postLoading ? (
         <div>Loading...</div>
       ) : (
-        <div>
-          <h1>{post.title}</h1>
-          <p>{post.content}</p>
-        </div>
+        <PostUI post={post} />
       )}
     </div>
   );
