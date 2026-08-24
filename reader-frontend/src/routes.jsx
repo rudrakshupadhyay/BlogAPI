@@ -4,6 +4,8 @@ import RegisterPage from "./pages/register/register";
 import LoginPage from "./pages/login/login";
 import PostsPage from "./pages/post/posts";
 import PerticularPost from "./pages/perticularPost/perticularPost";
+import perticulerPostLoader from "./services/perticulerPostLoader.js";
+
 const routes = [
   {
     path: "/",
