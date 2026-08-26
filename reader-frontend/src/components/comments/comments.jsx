@@ -1,22 +1,56 @@
 import styles from "./comments.module.css";
-import { FaUser, FaCaretDown } from "react-icons/fa";
+import { FaUser, FaCaretDown, FaEllipsisV } from "react-icons/fa";
 import { useState } from "react";
 import createComment from "../../api/createComment.js";
 import deleteCommentApi from "../../api/deleteComment.js";
 import { useAuth } from "../../context/AuthContext.jsx";
+import EditComment from "./editComment.jsx";
 
-function CreateComment({
-  postId,
-  setCreatingComment,
-  setPost,
-  user,
-  accessToken,
-  refreshAccessToken,
-}) {
+function CommentActions({ onEdit, onDelete }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleEdit() {
+    setIsOpen(false);
+    onEdit();
+  }
+
+  async function handleDelete() {
+    setIsOpen(false);
+    await onDelete();
+  }
+
+  return (
+    <div className={styles.commentActionMenu}>
+      <button
+        type="button"
+        className={styles.menuButton}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-label="Comment actions"
+      >
+        <FaEllipsisV />
+      </button>
+
+      {isOpen && (
+        <div className={styles.dropdown}>
+          <button type="button" onClick={handleEdit}>
+            Edit
+          </button>
+
+          <button type="button" onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+function CreateComment({ postId, setCreatingComment, setPost }) {
   // Logic to create a comment goes here
   const [commentContent, setCommentContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { user, accessToken, refreshAccessToken } = useAuth();
   function handleChange(event) {
     setCommentContent(event.target.value);
   }
@@ -79,7 +113,10 @@ function CreateComment({
 function Comments({ comments, post, setPost }) {
   const [showComments, setShowComments] = useState(false);
   const [creatingComment, setCreatingComment] = useState(false);
+  const [editingComment, setEditingComment] = useState(null);
   const { user, accessToken, refreshAccessToken } = useAuth();
+
+
 
   async function handleDeleteComment(commentId) {
     try {
@@ -125,9 +162,13 @@ function Comments({ comments, post, setPost }) {
           postId={post.id}
           setCreatingComment={setCreatingComment}
           setPost={setPost}
-          user={user}
-          accessToken={accessToken}
-          refreshAccessToken={refreshAccessToken}
+        />
+      )}
+      {editingComment && (
+        <EditComment
+          comment={editingComment}
+          setEditingComment={setEditingComment}
+          setPost={setPost}
         />
       )}
       {showComments &&
@@ -146,12 +187,10 @@ function Comments({ comments, post, setPost }) {
                   </div>
                   <div className={styles.commentActions}>
                     {user && comment.author.id === user.id && (
-                      <button
-                        className={styles.deleteCommentButton}
-                        onClick={() => handleDeleteComment(comment.id)}
-                      >
-                        Delete
-                      </button>
+                      <CommentActions
+                        onEdit={() => setEditingComment(comment)}
+                        onDelete={() => handleDeleteComment(comment.id)}
+                      />
                     )}
                   </div>
                 </div>
