@@ -76,3 +76,42 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.createCommentButton {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 10px;
+}
+
+.createCommentButton:disabled {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+}
+
+.commentActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.createCommentContainer {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.submitCommentButton {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 10px;
+  align-self: flex-end;
+}

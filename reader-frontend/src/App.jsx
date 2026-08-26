@@ -1,13 +1,18 @@
-import { useAuth } from "./context/AuthContext";
 import Header from "./components/header/header";
-function App() {
-  const { user } = useAuth();
+import HomeUI from "./pages/home/home.jsx";
+import styles from "./pages/home/home.module.css";
+
+function Home() {
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <Header />
-      <div>Hello, {user ? user.name : "World"}!</div>
+      <HomeUI />
     </div>
   );
+}
+
+function App() {
+  return <Home />;
 }
 
 export default App;
