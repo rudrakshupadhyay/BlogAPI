@@ -6,7 +6,7 @@ import Header from "../../components/header/header.jsx";
 import styles from "./perticularPost.module.css";
 import Comments from "../../components/comments/comments.jsx";
 
-function PostUI({ post }) {
+function PostUI({ post, setPost }) {
   return (
     <main className={styles.post}>
       <section className={styles.postCard}>
@@ -32,7 +32,7 @@ function PostUI({ post }) {
           className={styles.postContent}
           dangerouslySetInnerHTML={{ __html: post.content }}
         ></div>
-        <Comments comments={post.comments} />
+        <Comments comments={post.comments} post={post} setPost={setPost} />
       </section>
       <footer className={styles.postFooter}>
         <div> this is footer content</div>
@@ -98,7 +98,7 @@ function PerticularPost() {
       ) : postLoading ? (
         <div>Loading...</div>
       ) : (
-        <PostUI post={post} />
+        <PostUI post={post} setPost={setPost} />
       )}
     </div>
   );

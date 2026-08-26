@@ -1,16 +1,54 @@
 import styles from "./comments.module.css";
 import { FaUser, FaCaretDown } from "react-icons/fa";
 import { useState } from "react";
-
-function CreateComment() {
+import createComment from "../../api/createComment.js";
+import { useAuth } from "../../context/AuthContext.jsx";
+function CreateComment({ postId, setCreatingComment, setPost }) {
   // Logic to create a comment goes here
   const [commentContent, setCommentContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, accessToken, refreshAccessToken } = useAuth();
+
   function handleChange(event) {
     setCommentContent(event.target.value);
   }
-  function handleSubmit() {
-    console.log("Submitting comment:", commentContent);
-    setCommentContent("");
+
+  async function handleSubmit() {
+    setIsSubmitting(true);
+    try {
+      let response = await createComment(postId, commentContent, accessToken);
+      if (response.status === 401) {
+        const refreshedAccessToken = await refreshAccessToken();
+        response = await createComment(
+          postId,
+          commentContent,
+          refreshedAccessToken,
+        );
+      }
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to create comment");
+      }
+      setCommentContent("");
+      // Update the post with the new comment
+      setPost((prevPost) => ({
+        ...prevPost,
+        comments: [
+          ...prevPost.comments,
+          {
+            id: data.id,
+            content: data.content,
+            createdAt: data.createdAt,
+            author: { id: user.id, name: user.name },
+          },
+        ],
+      }));
+    } catch (error) {
+      console.error("Error creating comment:", error);
+    } finally {
+      setCreatingComment(false);
+      setIsSubmitting(false);
+    }
   }
   return (
     <div className={styles.createCommentContainer}>
@@ -19,16 +57,21 @@ function CreateComment() {
         onChange={handleChange}
         value={commentContent}
       />
-      <button className={styles.submitCommentButton} onClick={handleSubmit}>
+      <button
+        className={styles.submitCommentButton}
+        onClick={handleSubmit}
+        disabled={isSubmitting}
+      >
         Submit
       </button>
     </div>
   );
 }
 
-function Comments({ comments }) {
+function Comments({ comments, post, setPost }) {
   const [showComments, setShowComments] = useState(false);
   const [creatingComment, setCreatingComment] = useState(false);
+  const { user } = useAuth();
   return (
     <div className={styles.commentsContainer}>
       <div className={styles.commentsHeader}>
@@ -46,7 +89,13 @@ function Comments({ comments }) {
           </button>
         </div>
       </div>
-      {creatingComment && <CreateComment />}
+      {creatingComment && (
+        <CreateComment
+          postId={post.id}
+          setCreatingComment={setCreatingComment}
+          setPost={setPost}
+        />
+      )}
       {showComments &&
         (comments.length > 0 ? (
           <ul className={styles.commentList}>
