@@ -11,4 +11,9 @@ commentRouter.post("/:postId", authenticate, commentController.createComment);
 DELETE /api/comments/:commentId
 */
 commentRouter.delete("/:commentId", authenticate, commentController.deleteComment);
+/*
+PATCH /api/comments/:commentId
+*/
+commentRouter.patch("/:commentId", authenticate, commentController.updateComment);
+
 export default commentRouter;

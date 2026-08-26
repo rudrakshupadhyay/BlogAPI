@@ -27,3 +27,19 @@ export async function deleteComment(req, res) {
   });
   res.status(200).json({ message: "Comment deleted successfully" });
 }
+
+export async function updateComment(req, res) {
+  const commentId = req.params.commentId;
+  const content = req.body.content;
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+  });
+  if (!comment) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
+  const updatedComment = await prisma.comment.update({
+    where: { id: commentId },
+    data: { content },
+  });
+  res.status(200).json(updatedComment);
+}
