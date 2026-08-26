@@ -7,5 +7,8 @@ const commentRouter = Router();
 POST /api/comments/:postId
 */
 commentRouter.post("/:postId", authenticate, commentController.createComment);
-
+/*
+DELETE /api/comments/:commentId
+*/
+commentRouter.delete("/:commentId", authenticate, commentController.deleteComment);
 export default commentRouter;
