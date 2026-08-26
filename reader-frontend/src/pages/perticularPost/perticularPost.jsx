@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useParams, Link } from "react-router";
 import Header from "../../components/header/header.jsx";
 import styles from "./perticularPost.module.css";
+import Comments from "../../components/comments/comments.jsx";
 
 function PostUI({ post }) {
   return (
@@ -31,6 +32,7 @@ function PostUI({ post }) {
           className={styles.postContent}
           dangerouslySetInnerHTML={{ __html: post.content }}
         ></div>
+        <Comments comments={post.comments} />
       </section>
       <footer className={styles.postFooter}>
         <div> this is footer content</div>
