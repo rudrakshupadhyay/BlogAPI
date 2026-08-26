@@ -2,12 +2,20 @@ import styles from "./comments.module.css";
 import { FaUser, FaCaretDown } from "react-icons/fa";
 import { useState } from "react";
 import createComment from "../../api/createComment.js";
+import deleteCommentApi from "../../api/deleteComment.js";
 import { useAuth } from "../../context/AuthContext.jsx";
-function CreateComment({ postId, setCreatingComment, setPost }) {
+
+function CreateComment({
+  postId,
+  setCreatingComment,
+  setPost,
+  user,
+  accessToken,
+  refreshAccessToken,
+}) {
   // Logic to create a comment goes here
   const [commentContent, setCommentContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { user, accessToken, refreshAccessToken } = useAuth();
 
   function handleChange(event) {
     setCommentContent(event.target.value);
@@ -71,7 +79,30 @@ function CreateComment({ postId, setCreatingComment, setPost }) {
 function Comments({ comments, post, setPost }) {
   const [showComments, setShowComments] = useState(false);
   const [creatingComment, setCreatingComment] = useState(false);
-  const { user } = useAuth();
+  const { user, accessToken, refreshAccessToken } = useAuth();
+
+  async function handleDeleteComment(commentId) {
+    try {
+      let response = await deleteCommentApi(commentId, accessToken);
+      if (response.status === 401) {
+        const refreshedAccessToken = await refreshAccessToken();
+        response = await deleteCommentApi(commentId, refreshedAccessToken);
+      }
+      if (!response.ok) {
+        throw new Error("Failed to delete comment");
+      }
+      // Update the post by removing the deleted comment
+      setPost((prevPost) => ({
+        ...prevPost,
+        comments: prevPost.comments.filter(
+          (comment) => comment.id !== commentId,
+        ),
+      }));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  }
+
   return (
     <div className={styles.commentsContainer}>
       <div className={styles.commentsHeader}>
@@ -94,6 +125,9 @@ function Comments({ comments, post, setPost }) {
           postId={post.id}
           setCreatingComment={setCreatingComment}
           setPost={setPost}
+          user={user}
+          accessToken={accessToken}
+          refreshAccessToken={refreshAccessToken}
         />
       )}
       {showComments &&
@@ -101,11 +135,25 @@ function Comments({ comments, post, setPost }) {
           <ul className={styles.commentList}>
             {comments.map((comment) => (
               <li key={comment.id} className={styles.comment}>
-                <div className={styles.commentAuthor}>
-                  <div className={styles.avatar}>
-                    <FaUser />
+                <div className={styles.commentHeader}>
+                  <div className={styles.commentAuthor}>
+                    <div className={styles.avatar}>
+                      <FaUser />
+                    </div>
+                    <div className={styles.authorName}>
+                      {comment.author.name}
+                    </div>
                   </div>
-                  <div className={styles.authorName}>{comment.author.name}</div>
+                  <div className={styles.commentActions}>
+                    {user && comment.author.id === user.id && (
+                      <button
+                        className={styles.deleteCommentButton}
+                        onClick={() => handleDeleteComment(comment.id)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <p className={styles.commentContent}>{comment.content}</p>
               </li>
