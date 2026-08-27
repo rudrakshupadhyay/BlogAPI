@@ -4,18 +4,18 @@ import styles from "./posts.module.css";
 import configuration from "../../utils/configuration.js";
 import SearchBar from "../../components/searchBar/searchBar.jsx";
 import { Link } from "react-router";
-
+import { useAuth } from "../../context/AuthContext.jsx";
 function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [postListLoading, setPostListLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const { loading } = useAuth();
   useEffect(() => {
     async function fetchPosts() {
-      setLoading(true);
+      setPostListLoading(true);
       setError(null);
 
       try {
@@ -47,7 +47,7 @@ function PostsPage() {
         console.error("Error fetching posts:", error);
         setError(error.message);
       } finally {
-        setLoading(false);
+        setPostListLoading(false);
       }
     }
 
@@ -56,11 +56,6 @@ function PostsPage() {
 
   function handlePrevious() {
     setPage((prevPage) => prevPage - 1);
-  }
-
-  function handlePostClick(postId) {
-    // Navigate to the post detail page
-    console.log(`Navigating to post with ID: ${postId}`);
   }
 
   function handleNext() {
@@ -75,79 +70,83 @@ function PostsPage() {
   return (
     <div className={styles.page}>
       <Header />
-      <main className={styles.main}>
-        <SearchBar handleSearch={handleSearch} />
-        <section className={styles.postsSection}>
-          {loading ? (
-            <p>Loading posts...</p>
-          ) : error ? (
-            <p>Error fetching posts: {error}</p>
-          ) : (
-            <div className={styles.innerMain}>
-              <div className={styles.postsContainer}>
-                {posts.map((post) => (
-                  <Link
-                    to={`/post/${post.slug}`}
-                    key={post.id}
-                    className={styles.postLink}
-                  >
-                    <div className={styles.post}>
-                      <div className={styles.postTitle}>{post.title}</div>
-                      <div className={styles.metaInfo}>
-                        <div>
-                          {" "}
-                          {new Date(post.publishedAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
-                        </div>
-                        <div>{post.author.name}</div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-
-              <footer className={styles.pagination}>
-                <button
-                  onClick={handlePrevious}
-                  disabled={page === 1}
-                  className={styles.paginationButton}
-                >
-                  Previous
-                </button>
-
-                {Array.from({ length: totalPages }, (_, index) => {
-                  const pageNumber = index + 1;
-
-                  return (
-                    <button
-                      key={pageNumber}
-                      onClick={() => setPage(pageNumber)}
-                      disabled={page === pageNumber}
-                      className={styles.paginationButtonNumber}
+      {loading ? (
+        <div className={styles.loading}>Loading Auth...</div>
+      ) : (
+        <main className={styles.main}>
+          <SearchBar handleSearch={handleSearch} />
+          <section className={styles.postsSection}>
+            {postListLoading ? (
+              <div className={styles.loading}>Loading posts...</div>
+            ) : error ? (
+              <div className={styles.PostFetchError}>Error fetching posts: {error}</div>
+            ) : (
+              <div className={styles.innerMain}>
+                <div className={styles.postsContainer}>
+                  {posts.map((post) => (
+                    <Link
+                      to={`/post/${post.slug}`}
+                      key={post.id}
+                      className={styles.postLink}
                     >
-                      {pageNumber}
-                    </button>
-                  );
-                })}
+                      <div className={styles.post}>
+                        <div className={styles.postTitle}>{post.title}</div>
+                        <div className={styles.metaInfo}>
+                          <div>
+                            {" "}
+                            {new Date(post.publishedAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              },
+                            )}
+                          </div>
+                          <div>{post.author.name}</div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
 
-                <button
-                  onClick={handleNext}
-                  disabled={page === totalPages}
-                  className={styles.paginationButton}
-                >
-                  Next
-                </button>
-              </footer>
-            </div>
-          )}
-        </section>
-      </main>
+                <footer className={styles.pagination}>
+                  <button
+                    onClick={handlePrevious}
+                    disabled={page === 1}
+                    className={styles.paginationButton}
+                  >
+                    Previous
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, index) => {
+                    const pageNumber = index + 1;
+
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => setPage(pageNumber)}
+                        disabled={page === pageNumber}
+                        className={styles.paginationButtonNumber}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+
+                  <button
+                    onClick={handleNext}
+                    disabled={page === totalPages}
+                    className={styles.paginationButton}
+                  >
+                    Next
+                  </button>
+                </footer>
+              </div>
+            )}
+          </section>
+        </main>
+      )}
     </div>
   );
 }

@@ -5,6 +5,36 @@ import { useParams, Link } from "react-router";
 import Header from "../../components/header/header.jsx";
 import styles from "./perticularPost.module.css";
 import Comments from "../../components/comments/comments.jsx";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+
+function Footer() {
+  return (
+    <footer className={styles.postFooter}>
+      <div className={styles.socialLinks}>
+        <a
+          href="https://github.com/rudrakshupadhyay"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          className={styles.githubLink}
+        >
+          <FaGithub />
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/rudrakshupadhyay/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+          className={styles.linkedinLink}
+        >
+          <FaLinkedin />
+        </a>
+      </div>
+      <p>© {new Date().getFullYear()} Writely. All rights reserved.</p>
+    </footer>
+  );
+}
 
 function PostUI({ post, setPost }) {
   return (
@@ -34,9 +64,7 @@ function PostUI({ post, setPost }) {
         ></div>
         <Comments comments={post.comments} post={post} setPost={setPost} />
       </section>
-      <footer className={styles.postFooter}>
-        <div> this is footer content</div>
-      </footer>
+      <Footer />
     </main>
   );
 }
@@ -85,18 +113,25 @@ function PerticularPost() {
   return (
     <div className={styles.pageContainer}>
       <Header />
-      {error ? (
-        <div>
-          <div>Error: {error.message}</div>
-          {!user && (
-            <div>
+      {loading ? (
+        <div className={styles.loading}>Loading Auth...</div>
+      ) : error ? (
+        <div className={styles.errorContainer}>
+          {!user ? (
+            <div className={styles.errorMessage}>
               <p>You need to be logged in to view this post.</p>
-              <Link to="/login">Go to Login</Link>
+              <Link to="/login" className={styles.backLogin}>
+                Go to Login
+              </Link>
+            </div>
+          ) : (
+            <div className={styles.errorMessage}>
+              Error fetching post: {error.message}
             </div>
           )}
         </div>
       ) : postLoading ? (
-        <div>Loading...</div>
+        <div className={styles.loading}>Loading...</div>
       ) : (
         <PostUI post={post} setPost={setPost} />
       )}

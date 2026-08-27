@@ -51,6 +51,10 @@
 
 .postFooter {
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -58,4 +62,61 @@
   padding: 1rem;
   text-align: center;
   border-top: 1px solid #e2e8f0;
+}
+
+.errorContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  font-size: 1.25rem;
+}
+
+.errorMessage {
+  color: #ef4444;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.backLogin {
+  text-decoration: none;
+  color: #3b82f6;
+  font-weight: bold;
+  background-color: #e0f2fe;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s
+}
+
+.backLogin:hover {
+  background-color: #bae6fd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.5rem;
+  color: #2563eb;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.githubLink, .linkedinLink {
+  color: #475569;
+  transition: color 0.3s ease;
 }
