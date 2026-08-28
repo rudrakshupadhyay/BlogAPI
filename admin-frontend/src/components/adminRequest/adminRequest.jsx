@@ -34,13 +34,9 @@ function AdminRequestPage() {
         );
       }
 
-      if (response.status === 409) {
-        throw new Error("You already have a pending admin request.");
-      }
-
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to send admin request");
+        throw new Error(data.error || "Failed to send admin request");
       }
 
       setSubmissionSuccess(true);
