@@ -52,3 +52,12 @@ export const validateAdminRequest = [
     .isLength({ min: 1, max: 100 })
     .withMessage("Genre must be between 1 and 100 characters"),
 ];
+
+export const validateAdminRequestStatusUpdate = [
+  body("status")
+    .trim()
+    .notEmpty()
+    .withMessage("Status is required")
+    .isIn(["APPROVED", "REJECTED"])
+    .withMessage("Status must be either 'APPROVED' or 'REJECTED'"),
+];
