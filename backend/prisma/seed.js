@@ -5,12 +5,21 @@ import posts from "./samplePosts.js";
 async function main() {
   const password = await bcrypt.hash(config.ADMIN_PASSWORD, 10);
 
+  const owner = await prisma.user.create({
+    data: {
+      username: "writely",
+      name: "Writely Owner",
+      password,
+      role: "OWNER",
+    },
+  });
+
   const admin = await prisma.user.create({
     data: {
       username: "admin",
       name: "Admin User",
       password,
-      roles: "admin",
+      role: "ADMIN",
     },
   });
 
@@ -19,10 +28,10 @@ async function main() {
       username: "john",
       name: "John Doe",
       password,
-      roles: "reader",
+      role: "READER",
     },
   });
-  
+
   let createdPostId;
 
   for (const post of posts) {

@@ -38,3 +38,17 @@ export const validateRegistration = [
     .withMessage("Password must be at least 6 characters long"),
 ];
 
+export const validateAdminRequest = [
+  body("reason")
+    .trim()
+    .notEmpty()
+    .withMessage("Reason is required")
+    .isLength({ min: 1, max: 255 })
+    .withMessage("Reason must be between 1 and 255 characters"),
+
+  body("genre")
+    .optional({ nullable: true, checkFalsy: true })
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Genre must be between 1 and 100 characters"),
+];

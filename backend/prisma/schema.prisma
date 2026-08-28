@@ -12,15 +12,44 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  READER
+  ADMIN
+  OWNER
+}
+
+enum AdminRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
-  id       Int       @id @default(autoincrement())
-  username String    @unique
-  name     String
-  password String
-  roles    String    @default("reader")
-  sessions Session[]
-  posts    Post[]
-  comments Comment[]
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
+  name          String
+  password      String
+  role          Role           @default(READER)
+  sessions      Session[]
+  posts         Post[]
+  comments      Comment[]
+  adminRequests AdminRequest[]
+}
+
+model AdminRequest {
+  id        String             @id @default(uuid())
+  userId    Int
+  reason    String
+  genre     String?
+  status    AdminRequestStatus @default(PENDING)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  expiresAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
 }
 
 model Session {
