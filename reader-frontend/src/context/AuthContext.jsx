@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
 
     if (!response.ok) {
       const error = new Error(data.message || "Registration failed");
-      error.errors = data.errors;
+      error.errors = data.errors || [];
       throw error;
     }
 
