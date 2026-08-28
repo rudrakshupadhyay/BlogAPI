@@ -7,7 +7,7 @@ async function editComment(comment, newContent, accessToken) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ content: newContent }),
     },

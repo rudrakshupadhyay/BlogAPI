@@ -1,11 +1,26 @@
+import { useAuth } from "./context/AuthContext.jsx";
+import { Outlet, Link } from "react-router";
+import AdminRequestPage from "./components/adminRequest/adminRequest.jsx";
+
 function App() {
+  const { user, loading } = useAuth();
   return (
     <div className="app">
-      <header>
-        <h1>Welcome to the Admin Panel</h1>
-      </header>
       <main>
-        <p>This is the main content area.</p>
+        {loading ? (
+          <p>Loading Auth...</p>
+        ) : user ? (
+          user.role === "READER" ? (
+            <AdminRequestPage />
+          ) : (
+            <Outlet />
+          )
+        ) : (
+          <div>
+            <p>Please log in to access the admin panel.</p>
+            <Link to="/login">Go to Login</Link>
+          </div>
+        )}
       </main>
     </div>
   );

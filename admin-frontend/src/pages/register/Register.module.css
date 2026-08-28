@@ -1,0 +1,74 @@
+.registerPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8fafc;
+}
+
+.registerHeading {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+.registerForm {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+.error {
+  color: red;
+  background-color: #ffe5e5;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.errorList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+}
+
+.formInput:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  border: 1px solid #2563eb;
+}
+
+.registerButton {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.loginLink {
+  margin-top: 1rem;
+  text-align: center;
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 1.125rem;
+}
