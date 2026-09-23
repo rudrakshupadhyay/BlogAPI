@@ -4,6 +4,8 @@ import {
 } from "../utils/validate.js";
 import { validationResult, matchedData } from "express-validator";
 import { prisma } from "../../lib/prisma.js";
+import { sendAdminRequestEmail } from "../services/email.service.js";
+import config from "../config/config.js";
 
 export const createAdminRequest = [
   ...validateAdminRequest,
@@ -38,7 +40,30 @@ export const createAdminRequest = [
 
       const adminRequest = await prisma.adminRequest.create({
         data,
+        include: {
+          user: {
+            select: {
+              username: true,
+              name: true,
+            },
+          },
+        },
       });
+
+      const reviewUrl = `${config.ORIGIN}/pending-requests`;
+
+      try {
+        await sendAdminRequestEmail({
+          username: adminRequest.user.username,
+          name: adminRequest.user.name,
+          genre: adminRequest.genre,
+          reason: adminRequest.reason,
+          requestId: adminRequest.id,
+          reviewUrl,
+        });
+      } catch (error) {
+        console.error("Failed to send admin request email:", error);
+      }
 
       res.status(201).json(adminRequest);
     } catch (error) {
