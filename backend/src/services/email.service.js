@@ -11,7 +11,7 @@ export const sendAdminRequestEmail = async ({
   requestId,
   reviewUrl,
 }) => {
-  await resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: "onboarding@resend.dev",
     to: config.OWNER_EMAIL,
     subject: `New Admin Request from @${username}`,
@@ -33,4 +33,11 @@ export const sendAdminRequestEmail = async ({
       <a href="${reviewUrl}">Review Request</a>
     `,
   });
+
+  if (error) {
+    console.error("Resend error:", error);
+    return;
+  }
+
+  console.log("Email sent:", data);
 };
