@@ -38,6 +38,16 @@ function Header() {
                 Posts
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/create-post"
+                className={({ isActive }) =>
+                  isActive ? styles.active : styles.navLink
+                }
+              >
+                Create Post
+              </NavLink>
+            </li>
             {user ? (
               <li>
                 <button onClick={handleLogout} className={styles.logout}>

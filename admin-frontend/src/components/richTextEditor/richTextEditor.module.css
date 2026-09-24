@@ -1,0 +1,55 @@
+.editorContainer {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.toolbar button {
+  padding: 6px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #e8f0fe;
+  color: #1d4ed8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar button:hover {
+  background: #f2f2f2;
+  color: #1e40af;
+}
+
+.editorContainer :global(.tiptap) {
+  min-height: 400px;
+  padding: 16px;
+  outline: none;
+}
+
+.editorContainer :global(.tiptap) p {
+  margin: 0 0 12px;
+}
+
+.editorContainer :global(.tiptap) h1,
+.editorContainer :global(.tiptap) h2,
+.editorContainer :global(.tiptap) h3 {
+  margin: 20px 0 10px;
+}
+
+.editorContainer :global(.tiptap) ul,
+.editorContainer :global(.tiptap) ol {
+  padding-left: 24px;
+}
+
+.editorContainer :global(.tiptap) blockquote {
+  border-left: 3px solid #999;
+  padding-left: 12px;
+  margin-left: 0;
+}
