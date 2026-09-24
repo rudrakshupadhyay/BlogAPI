@@ -61,3 +61,47 @@ export const validateAdminRequestStatusUpdate = [
     .isIn(["APPROVED", "REJECTED"])
     .withMessage("Status must be either 'APPROVED' or 'REJECTED'"),
 ];
+
+export const validatePostCreation = [
+  body("title")
+    .trim()
+    .notEmpty()
+    .withMessage("Title is required")
+    .isLength({ min: 1, max: 255 })
+    .withMessage("Title must be between 1 and 255 characters"),
+
+  body("content")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Content cannot be empty")
+    .isLength({ min: 10 })
+    .withMessage("Content must be at least 10 characters long"),
+
+  body("slug")
+    .trim()
+    .notEmpty()
+    .withMessage("Slug is required")
+    .isLength({ min: 1, max: 255 })
+    .withMessage("Slug must be between 1 and 255 characters")
+    .custom(async (value) => {
+      const existingPost = await prisma.post.findUnique({
+        where: { slug: value },
+      });
+      if (existingPost) {
+        throw new Error("Slug is already taken");
+      }
+    }),
+
+  body("published")
+    .optional()
+    .isBoolean()
+    .withMessage("Published must be a boolean")
+    .toBoolean(),
+
+  body("featured")
+    .optional()
+    .isBoolean()
+    .withMessage("Featured must be a boolean")
+    .toBoolean(),
+];

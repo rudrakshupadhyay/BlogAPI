@@ -1,4 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
+import { validatePostCreation } from "../utils/validate.js";
+import { validationResult, matchedData } from "express-validator";
 
 export async function getPublishedPosts(req, res) {
   try {
@@ -112,3 +114,39 @@ export async function getPostBySlug(req, res) {
     });
   }
 }
+
+export const createPost = [
+  ...validatePostCreation,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { title, content, slug, published, featured } = matchedData(req);
+
+    try {
+      const post = await prisma.post.create({
+        data: {
+          title,
+          content,
+          slug,
+          published,
+          featured,
+          authorId: req.user.id,
+          publishedAt: published ? new Date() : null,
+        },
+      });
+
+      res.status(201).json({
+        post,
+      });
+    } catch (error) {
+      console.error("Error creating post:", error);
+
+      res.status(500).json({
+        message: "Failed to create post",
+      });
+    }
+  },
+];
