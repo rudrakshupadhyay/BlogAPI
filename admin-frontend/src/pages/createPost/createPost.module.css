@@ -1,0 +1,32 @@
+.toggleItem {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.toggleContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.toggleItem span {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.saveButton {
+  background-color: #007bff;
+  border: none;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  
+}
+
+.saveButton:hover {
+  background-color: #0056b3;
+}

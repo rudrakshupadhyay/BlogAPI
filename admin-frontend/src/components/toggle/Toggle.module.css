@@ -1,0 +1,33 @@
+.toggle {
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+  border: none;
+  border-radius: 999px;
+  background-color: #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.2s ease;
+}
+
+.active {
+  background-color: #2563eb;
+}
+
+.active .thumb {
+  transform: translateX(20px);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
