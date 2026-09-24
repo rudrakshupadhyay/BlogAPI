@@ -18,15 +18,49 @@
 }
 
 .saveButton {
-  background-color: #007bff;
+  background-color: #2563eb;
+  color: white;
   border: none;
-  color: #ffffff;
   padding: 0.5rem 1.5rem;
-  border-radius: 0.25rem;
+  border-radius: 4px;
   cursor: pointer;
-  
+  transition: background-color 0.2s ease;
+  margin: 1rem;
 }
 
 .saveButton:hover {
-  background-color: #0056b3;
+  background-color: #1d4ed8;
+}
+
+.inputGroup{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #172b4d;
+  font-size: 1.5em;
+}
+
+.input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 1rem;
 }

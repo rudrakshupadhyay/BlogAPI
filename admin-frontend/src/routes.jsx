@@ -4,6 +4,8 @@ import LoginPage from "./pages/login/login.jsx";
 import RegisterPage from "./pages/register/register.jsx";
 import PendingRequestPage from "./pages/pendingRequest/pendingRequest.jsx";
 import CreatePostPage from "./pages/createPost/createPost.jsx";
+import Dashboard from "./pages/deshboard/deshboard.jsx";
+import PostsPage from "./pages/post/posts.jsx";
 
 const routes = [
   {
@@ -20,7 +22,7 @@ const routes = [
     children: [
       {
         index: true,
-        element: <div>Welcome to the Blog App!</div>,
+        element: <Dashboard />,
       },
     ],
   },
@@ -31,6 +33,10 @@ const routes = [
   {
     path: "/create-post",
     element: <CreatePostPage />,
+  },
+  {
+    path: "/posts",
+    element: <PostsPage />,
   },
   {
     path: "*",

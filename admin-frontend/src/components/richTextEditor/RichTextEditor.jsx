@@ -2,10 +2,13 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import styles from "./richTextEditor.module.css";
 
-function RichTextEditor() {
+function RichTextEditor({ content, setContent }) {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: "<p>Start writing...</p>",
+    content,
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML());
+    },
   });
 
   if (!editor) {

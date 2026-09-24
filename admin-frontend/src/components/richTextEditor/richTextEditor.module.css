@@ -14,16 +14,16 @@
 
 .toolbar button {
   padding: 6px 10px;
-  border: 1px solid #bfdbfe;
+  border: 1px solid #4e5051;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #e8f0fe;
-  color: #1d4ed8;
+  background: #f2f2f2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #172b4d;
 }
 
 .toolbar button:hover {
-  background: #f2f2f2;
+  background: #e8f0fe;
   color: #1e40af;
 }
 
@@ -31,6 +31,7 @@
   min-height: 400px;
   padding: 16px;
   outline: none;
+  background-color: #f8fafc;
 }
 
 .editorContainer :global(.tiptap) p {

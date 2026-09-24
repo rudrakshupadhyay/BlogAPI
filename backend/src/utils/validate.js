@@ -78,21 +78,6 @@ export const validatePostCreation = [
     .isLength({ min: 10 })
     .withMessage("Content must be at least 10 characters long"),
 
-  body("slug")
-    .trim()
-    .notEmpty()
-    .withMessage("Slug is required")
-    .isLength({ min: 1, max: 255 })
-    .withMessage("Slug must be between 1 and 255 characters")
-    .custom(async (value) => {
-      const existingPost = await prisma.post.findUnique({
-        where: { slug: value },
-      });
-      if (existingPost) {
-        throw new Error("Slug is already taken");
-      }
-    }),
-
   body("published")
     .optional()
     .isBoolean()

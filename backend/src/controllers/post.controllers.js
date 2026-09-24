@@ -1,6 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
 import { validatePostCreation } from "../utils/validate.js";
 import { validationResult, matchedData } from "express-validator";
+import generateUniqueSlug from "../utils/generateSlug.js";
 
 export async function getPublishedPosts(req, res) {
   try {
@@ -123,14 +124,14 @@ export const createPost = [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, content, slug, published, featured } = matchedData(req);
+    const { title, content, published, featured } = matchedData(req);
 
     try {
       const post = await prisma.post.create({
         data: {
           title,
           content,
-          slug,
+          slug: await generateUniqueSlug(title),
           published,
           featured,
           authorId: req.user.id,
