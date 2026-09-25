@@ -62,7 +62,7 @@ export const validateAdminRequestStatusUpdate = [
     .withMessage("Status must be either 'APPROVED' or 'REJECTED'"),
 ];
 
-export const validatePostCreation = [
+export const validatePost = [
   body("title")
     .trim()
     .notEmpty()

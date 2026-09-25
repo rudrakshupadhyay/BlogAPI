@@ -6,6 +6,7 @@ import PendingRequestPage from "./pages/pendingRequest/pendingRequest.jsx";
 import CreatePostPage from "./pages/createPost/createPost.jsx";
 import Dashboard from "./pages/deshboard/deshboard.jsx";
 import PostsPage from "./pages/post/posts.jsx";
+import PerticularPost from "./pages/perticularPost/perticularPost";
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: "/posts",
     element: <PostsPage />,
+  },
+  {
+    path: "/post/:slug",
+    element: <PerticularPost />,
   },
   {
     path: "*",

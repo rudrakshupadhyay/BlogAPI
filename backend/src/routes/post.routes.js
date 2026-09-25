@@ -22,4 +22,24 @@ postRouter.post(
   postController.createPost,
 );
 
+/*
+DELETE /api/posts/:slug
+*/
+postRouter.delete(
+  "/:slug",
+  authenticate,
+  authorize("ADMIN", "OWNER"),
+  postController.deletePostBySlug,
+);
+
+/*
+PATCH /api/posts/:slug
+*/
+postRouter.patch(
+  "/:slug",
+  authenticate,
+  authorize("ADMIN", "OWNER"),
+  postController.updatePostBySlug,
+);
+
 export default postRouter;

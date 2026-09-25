@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma.js";
-import { validatePostCreation } from "../utils/validate.js";
+import { validatePost } from "../utils/validate.js";
 import { validationResult, matchedData } from "express-validator";
 import generateUniqueSlug from "../utils/generateSlug.js";
 
@@ -117,7 +117,7 @@ export async function getPostBySlug(req, res) {
 }
 
 export const createPost = [
-  ...validatePostCreation,
+  ...validatePost,
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -148,6 +148,70 @@ export const createPost = [
       res.status(500).json({
         message: "Failed to create post",
       });
+    }
+  },
+];
+
+export async function deletePostBySlug(req, res) {
+  try {
+    const { slug } = req.params;
+    const post = await prisma.post.findUnique({
+      where: { slug },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const newPost = await prisma.post.delete({
+      where: { slug },
+    });
+
+    res.status(200).json({
+      post: newPost,
+    });
+  } catch (error) {
+    console.error("Error deleting post by slug:", error);
+
+    res.status(500).json({
+      message: "Failed to delete post",
+    });
+  }
+}
+
+export const updatePostBySlug = [
+  ...validatePost,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { slug } = req.params;
+    const { title, content, published, featured } = matchedData(req);
+    try {
+      const post = await prisma.post.findUnique({
+        where: { slug },
+      });
+
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      const updatedPost = await prisma.post.update({
+        where: { slug },
+        data: {
+          title,
+          content,
+          published,
+          featured,
+        },
+      });
+      
+      res.status(200).json({ post: updatedPost });
+    } catch (error) {
+      console.error("Error updating post by slug:", error);
+      res.status(500).json({ message: "Failed to update post" });
     }
   },
 ];
