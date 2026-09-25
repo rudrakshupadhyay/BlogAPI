@@ -128,7 +128,7 @@ function YourPost() {
 
                   <div className={styles.actions}>
                     <Link
-                      to={`/posts/${post.slug}`}
+                      to={`/post/${post.slug}`}
                       className={styles.viewLink}
                     >
                       View

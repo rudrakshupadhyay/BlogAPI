@@ -1,4 +1,4 @@
-import configuration from "../utils/configuration";
+import configuration from "../utils/configuration.js";
 
 async function getMinePosts(accessToken, page = 1, limit = 10, status) {
   const response = await fetch(

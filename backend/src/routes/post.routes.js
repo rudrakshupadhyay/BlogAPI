@@ -7,6 +7,18 @@ const postRouter = Router();
 GET /api/posts?page=1&limit=10
 */
 postRouter.get("/", postController.getPublishedPosts);
+
+/*
+GET /api/posts/mine?page=1&limit=10&status=published
+GET /api/posts/mine?page=1&limit=10&status=unpublished
+*/
+postRouter.get(
+  "/mine",
+  authenticate,
+  authorize("ADMIN", "OWNER"),
+  postController.getMyPosts,
+);
+
 /*
 GET /api/posts/:slug
 */
@@ -40,17 +52,6 @@ postRouter.patch(
   authenticate,
   authorize("ADMIN", "OWNER"),
   postController.updatePostBySlug,
-);
-
-/*
-GET /api/posts/mine?page=1&limit=10&status=published
-GET /api/posts/mine?page=1&limit=10&status=unpublished
-*/
-postRouter.get(
-  "/mine",
-  authenticate,
-  authorize("ADMIN", "OWNER"),
-  postController.getMyPosts,
 );
 
 export default postRouter;
