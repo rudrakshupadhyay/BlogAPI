@@ -1,6 +1,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import styles from "./richTextEditor.module.css";
+import { useEffect } from "react";
 
 function RichTextEditor({ content, setContent }) {
   const editor = useEditor({
@@ -10,6 +11,14 @@ function RichTextEditor({ content, setContent }) {
       setContent(editor.getHTML());
     },
   });
+
+  useEffect(() => {
+    if (!editor) return;
+
+    if (editor.getHTML() !== content) {
+      editor.commands.setContent(content || "");
+    }
+  }, [editor, content]);
 
   if (!editor) {
     return null;

@@ -7,6 +7,7 @@ import CreatePostPage from "./pages/createPost/createPost.jsx";
 import Dashboard from "./pages/deshboard/deshboard.jsx";
 import PostsPage from "./pages/post/posts.jsx";
 import PerticularPost from "./pages/perticularPost/perticularPost";
+import YourPost from "./pages/yourPostList/yourPost.jsx";
 
 const routes = [
   {
@@ -36,12 +37,20 @@ const routes = [
     element: <CreatePostPage />,
   },
   {
+    path: "/posts/:slug/edit",
+    element: <CreatePostPage />,
+  },
+  {
     path: "/posts",
     element: <PostsPage />,
   },
   {
     path: "/post/:slug",
     element: <PerticularPost />,
+  },
+  {
+    path: "/your-posts",
+    element: <YourPost />,
   },
   {
     path: "*",

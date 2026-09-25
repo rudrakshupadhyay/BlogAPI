@@ -35,7 +35,7 @@ function Header() {
                   isActive ? styles.active : styles.navLink
                 }
               >
-                Posts
+                Published Posts
               </NavLink>
             </li>
             <li>
@@ -46,6 +46,16 @@ function Header() {
                 }
               >
                 Create Post
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/your-posts"
+                className={({ isActive }) =>
+                  isActive ? styles.active : styles.navLink
+                }
+              >
+                Your Posts
               </NavLink>
             </li>
             {user ? (

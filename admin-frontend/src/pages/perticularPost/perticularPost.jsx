@@ -73,7 +73,7 @@ function PostUI({ post, setPost }) {
       setDeleting(false);
     }
   }
-  
+
   return (
     <main className={styles.post}>
       <section className={styles.postCard}>
@@ -183,7 +183,7 @@ function PerticularPost() {
             </div>
           )}
         </div>
-      ) : postLoading ? (
+      ) : postLoading || !post ? (
         <div className={styles.loading}>Loading...</div>
       ) : (
         <PostUI post={post} setPost={setPost} />

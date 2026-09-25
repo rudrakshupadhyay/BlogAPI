@@ -1,0 +1,181 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.heading {
+  margin-bottom: 1.5rem;
+  color: #172b4d;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.tab {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tab:hover {
+  color: #2563eb;
+}
+
+.activeTab {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  font-weight: 600;
+}
+
+.postList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.postCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.postInfo {
+  min-width: 0;
+}
+
+.postTitle {
+  margin: 0 0 0.5rem;
+  color: #172b4d;
+  font-size: 1.25rem;
+}
+
+.postDate {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.viewLink,
+.editLink {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.viewLink {
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+.editLink {
+  color: white;
+  background-color: #2563eb;
+}
+
+.viewLink:hover {
+  background-color: #eff6ff;
+}
+
+.editLink:hover {
+  background-color: #1d4ed8;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.paginationButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f1f5f9;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  color: #475569;
+}
+
+.loading,
+.empty,
+.error,
+.message {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.error {
+  color: #dc2626;
+}
+
+.message {
+  color: #475569;
+}
+
+.loginLink {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .postCard {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .viewLink,
+  .editLink {
+    text-align: center;
+    flex: 1;
+  }
+}

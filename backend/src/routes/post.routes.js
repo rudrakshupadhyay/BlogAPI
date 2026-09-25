@@ -42,4 +42,15 @@ postRouter.patch(
   postController.updatePostBySlug,
 );
 
+/*
+GET /api/posts/mine?page=1&limit=10&status=published
+GET /api/posts/mine?page=1&limit=10&status=unpublished
+*/
+postRouter.get(
+  "/mine",
+  authenticate,
+  authorize("ADMIN", "OWNER"),
+  postController.getMyPosts,
+);
+
 export default postRouter;
