@@ -145,24 +145,27 @@ function CreatePostPage() {
   return (
     <div>
       <Header />
-      <h1>{isEditMode ? "Edit Post" : "Create Post"}</h1>
       <div className={styles.toggleContainer}>
-        <div className={styles.toggleItem}>
-          <span>Published</span>
-          <Toggle
-            checked={published}
-            onChange={setPublished}
-            label="Toggle published status"
-          />
-        </div>
-
-        <div className={styles.toggleItem}>
-          <span>Featured</span>
-          <Toggle
-            checked={featured}
-            onChange={setFeatured}
-            label="Toggle featured status"
-          />
+        <h1 className={styles.sectionTitle}>
+          {isEditMode ? "Edit Post" : "Create Post"}
+        </h1>
+        <div className={styles.toggles}>
+          <div className={styles.toggleItem}>
+            <span>Published</span>
+            <Toggle
+              checked={published}
+              onChange={setPublished}
+              label="Toggle published status"
+            />
+          </div>
+          <div className={styles.toggleItem}>
+            <span>Featured</span>
+            <Toggle
+              checked={featured}
+              onChange={setFeatured}
+              label="Toggle featured status"
+            />
+          </div>
         </div>
       </div>
       <form className={styles.form} onSubmit={handleSubmit}>

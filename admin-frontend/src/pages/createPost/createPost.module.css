@@ -6,9 +6,20 @@
 
 .toggleContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
+  padding: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #172b4d;
+}
+
+.toggles {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .toggleItem span {
@@ -32,7 +43,7 @@
   background-color: #1d4ed8;
 }
 
-.inputGroup{
+.inputGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
@@ -52,7 +63,16 @@
   font-size: 1rem;
 }
 
-.form{
+
+
+.loading {
+  font-size: 1.5rem;
+  color: #333;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.form {
   display: flex;
   flex-direction: column;
   padding: 1rem;

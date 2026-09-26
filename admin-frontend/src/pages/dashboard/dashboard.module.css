@@ -1,84 +1,332 @@
 .dashboardContainer {
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 30px;
+  background-color: #f4f6f9;
 }
 
 .dashboardContent {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .dashboardTitle {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #172b4d;
-  display: flex;
-  justify-content: center;
-}
-
-.statistics {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-}
-
-.statistics p {
-  font-size: 16px;
-  color: #172b4d;
-  background: #fff;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 28px;
   font-weight: 700;
+  margin: 0 0 30px;
+  color: #172b4d;
+  text-align: center;
 }
+
+/* Statistics section */
 
 .statisticsContainer {
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-  padding: 20px 50px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.recentActivityContainer {
-  margin-bottom: 20px;
-  background-color: #fff;
-  padding: 20px 50px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  background-color: #f8fafc;
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
 }
 
 .welcomeMessage {
   font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 10px;
+  font-weight: 700;
+  margin: 0 0 20px;
   color: #172b4d;
   text-align: center;
-  font-family: Helvetica, sans-serif;
-  text-transform: uppercase;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  text-decoration: underline;
-  text-decoration-color: #0052cc;
 }
+
+/* Statistics cards */
+
+.statistics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.statistics p {
+  margin: 0;
+  padding: 22px 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+
+  font-size: 17px;
+  font-weight: 700;
+  color: #172b4d;
+  text-align: center;
+}
+
+/* Section title */
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 30px 0 15px;
+  color: #172b4d;
+}
+
+/* Featured posts */
+
+.recentActivityContainer {
+  margin-top: 10px;
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.featuredPostsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featuredPostItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 18px 20px;
+
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.featuredPostItem:hover {
+  transform: translateY(-2px);
+  border-color: #c7d7f5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.featuredPostInfo {
+  min-width: 0;
+  flex: 1;
+}
+
+.featuredPostItem h3 {
+  margin: 0 0 8px;
+
+  font-size: 18px;
+  font-weight: 700;
+  color: #172b4d;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Post status */
+
+.publishedStatus,
+.draftStatus {
+  display: inline-block;
+
+  padding: 4px 9px;
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.publishedStatus {
+  color: #166534;
+  background-color: #dcfce7;
+}
+
+.draftStatus {
+  color: #92400e;
+  background-color: #fef3c7;
+}
+
+/* View button */
+
+.viewLink {
+  flex-shrink: 0;
+
+  padding: 8px 18px;
+
+  border-radius: 6px;
+  background-color: #0052cc;
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.viewLink:hover {
+  background-color: #0747a6;
+  transform: translateY(-1px);
+}
+
+.viewLink:active {
+  transform: translateY(0);
+}
+
+/* Pagination */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+
+  margin-top: 25px;
+}
+
+.paginationButton {
+  padding: 9px 18px;
+
+  border: none;
+  border-radius: 6px;
+
+  background-color: #0052cc;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #0747a6;
+}
+
+.paginationButton:disabled {
+  background-color: #dfe1e6;
+  color: #7a869a;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 14px;
+  font-weight: 600;
+  color: #172b4d;
+}
+
+.editLink {
+  flex-shrink: 0;
+
+  padding: 8px 18px;
+
+  border-radius: 6px;
+  background-color: #f5a623;
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.editLink:hover {
+  background-color: #d48806;
+  transform: translateY(-1px);
+}
+
+.editLink:active {
+  transform: translateY(0);
+}
+
+/* Loading */
 
 .loadingMessage {
   font-size: 16px;
-  color: #172b4d;
+  color: #5e6c84;
+
   text-align: center;
+  padding: 20px;
+
   font-style: italic;
 }
 
+/* Error */
+
 .errorMessage {
-  color: red;
-  margin-bottom: 20px;
-  background-color: #ffe6e6;
-  padding: 10px;
+  color: #b42318;
+
+  margin: 0 0 20px;
+  padding: 12px 15px;
+
+  background-color: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 6px;
+
+  text-align: center;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 15px;
+  }
+
+  .dashboardContent {
+    padding: 20px;
+  }
+
+  .statistics {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardTitle {
+    font-size: 24px;
+  }
+
+  .recentActivityContainer,
+  .statisticsContainer {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .featuredPostItem {
+    align-items: flex-start;
+  }
+
+  .featuredPostItem h3 {
+    font-size: 16px;
+  }
+
+  .viewLink {
+    padding: 7px 14px;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  .paginationButton {
+    padding: 8px 12px;
+  }
 }

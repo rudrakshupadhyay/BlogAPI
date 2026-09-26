@@ -316,21 +316,41 @@ export async function getMyFeaturedPosts(req, res) {
     const limit = Math.min(Math.max(parseInt(req.query.limit) || 10, 1), 50);
     const skip = (page - 1) * limit;
 
-    const featuredPosts = await prisma.post.findMany({
-      where: {
-        authorId: req.user.id,
-        featured: true,
-      },
-      skip,
-      take: limit,
-      orderBy: {
-        updatedAt: "desc",
-      },
-    });
+    const [featuredPosts, totalFeaturedPosts] = await Promise.all([
+      prisma.post.findMany({
+        where: {
+          authorId: req.user.id,
+          featured: true,
+        },
+        skip,
+        take: limit,
+        orderBy: {
+          updatedAt: "desc",
+        },
+      }),
+
+      prisma.post.count({
+        where: {
+          authorId: req.user.id,
+          featured: true,
+        },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(totalFeaturedPosts / limit);
 
     return res.status(200).json({
       posts: featuredPosts,
+      pagination: {
+        page,
+        limit,
+        totalPosts: totalFeaturedPosts,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
+    
   } catch (error) {
     console.error("Error fetching user's featured posts:", error);
 

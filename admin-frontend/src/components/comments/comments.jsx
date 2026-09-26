@@ -186,7 +186,7 @@ function Comments({ comments, post, setPost }) {
                     </div>
                   </div>
                   <div className={styles.commentActions}>
-                    {user && comment.author.id === user.id && (
+                    {user && (comment.author.id === user.id || user.role === "OWNER") && (
                       <CommentActions
                         onEdit={() => setEditingComment(comment)}
                         onDelete={() => handleDeleteComment(comment.id)}
