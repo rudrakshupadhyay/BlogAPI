@@ -220,10 +220,7 @@ export async function getMyPosts(req, res) {
   try {
     const page = Math.max(parseInt(req.query.page) || 1, 1);
 
-    const limit = Math.min(
-      Math.max(parseInt(req.query.limit) || 10, 1),
-      50
-    );
+    const limit = Math.min(Math.max(parseInt(req.query.limit) || 10, 1), 50);
 
     const skip = (page - 1) * limit;
 
@@ -274,6 +271,71 @@ export async function getMyPosts(req, res) {
 
     return res.status(500).json({
       message: "Failed to fetch posts",
+    });
+  }
+}
+
+export async function getMyPostsStatistics(req, res) {
+  try {
+    const where = {
+      authorId: req.user.id,
+    };
+
+    const [publishedCount, unpublishedCount] = await Promise.all([
+      prisma.post.count({
+        where: {
+          ...where,
+          published: true,
+        },
+      }),
+      prisma.post.count({
+        where: {
+          ...where,
+          published: false,
+        },
+      }),
+    ]);
+
+    return res.status(200).json({
+      published: publishedCount,
+      unpublished: unpublishedCount,
+      total: publishedCount + unpublishedCount,
+    });
+  } catch (error) {
+    console.error("Error fetching user's posts statistics:", error);
+
+    return res.status(500).json({
+      message: "Failed to fetch posts statistics",
+    });
+  }
+}
+
+export async function getMyFeaturedPosts(req, res) {
+  try {
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit) || 10, 1), 50);
+    const skip = (page - 1) * limit;
+
+    const featuredPosts = await prisma.post.findMany({
+      where: {
+        authorId: req.user.id,
+        featured: true,
+      },
+      skip,
+      take: limit,
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    return res.status(200).json({
+      posts: featuredPosts,
+    });
+  } catch (error) {
+    console.error("Error fetching user's featured posts:", error);
+
+    return res.status(500).json({
+      message: "Failed to fetch featured posts",
     });
   }
 }

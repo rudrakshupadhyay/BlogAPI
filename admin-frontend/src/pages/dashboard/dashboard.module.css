@@ -1,0 +1,84 @@
+.dashboardContainer {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  height: 100vh;
+}
+
+.dashboardContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboardTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #172b4d;
+  display: flex;
+  justify-content: center;
+}
+
+.statistics {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.statistics p {
+  font-size: 16px;
+  color: #172b4d;
+  background: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+}
+
+.statisticsContainer {
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 20px 50px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recentActivityContainer {
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 20px 50px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.welcomeMessage {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #172b4d;
+  text-align: center;
+  font-family: Helvetica, sans-serif;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-decoration: underline;
+  text-decoration-color: #0052cc;
+}
+
+.loadingMessage {
+  font-size: 16px;
+  color: #172b4d;
+  text-align: center;
+  font-style: italic;
+}
+
+.errorMessage {
+  color: red;
+  margin-bottom: 20px;
+  background-color: #ffe6e6;
+  padding: 10px;
+}

@@ -20,6 +20,26 @@ postRouter.get(
 );
 
 /*
+GET /api/posts/mine/statistics
+*/
+
+postRouter.get(
+  "/mine/statistics",
+  authenticate,
+  authorize("ADMIN", "OWNER"),
+  postController.getMyPostsStatistics,
+);
+/*
+GET /api/posts/mine/featured?page=1&limit=10
+*/
+postRouter.get(
+  "/mine/featured",
+  authenticate,
+  authorize("ADMIN", "OWNER"),
+  postController.getMyFeaturedPosts,
+);
+
+/*
 GET /api/posts/:slug
 */
 postRouter.get("/:slug", authenticate, postController.getPostBySlug);
