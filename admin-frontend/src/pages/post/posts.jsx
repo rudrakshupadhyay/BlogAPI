@@ -13,7 +13,7 @@ function PostsPage() {
   const [postListLoading, setPostListLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const { loading } = useAuth();
+  const { loading, user } = useAuth();
   useEffect(() => {
     async function fetchPosts() {
       setPostListLoading(true);
@@ -68,6 +68,19 @@ function PostsPage() {
     setPage(1); // Reset to the first page when a new search is performed
   }
 
+  if (!user || (user.role !== "ADMIN" && user.role !== "OWNER")) {
+    return (
+      <div className={styles.page}>
+        <Header />
+        <main className={styles.main}>
+          <div className={styles.unauthorizedMessage}>
+            You are not authorized to view this page.
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <Header />
@@ -80,7 +93,9 @@ function PostsPage() {
             {postListLoading ? (
               <div className={styles.loading}>Loading posts...</div>
             ) : error ? (
-              <div className={styles.PostFetchError}>Error fetching posts: {error}</div>
+              <div className={styles.PostFetchError}>
+                Error fetching posts: {error}
+              </div>
             ) : (
               <div className={styles.innerMain}>
                 <div className={styles.postsContainer}>

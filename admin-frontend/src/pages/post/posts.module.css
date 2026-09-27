@@ -107,7 +107,7 @@
   font-weight: 600;
 }
 
-.loading{
+.loading {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,4 +118,11 @@
 
 .PostFetchError {
   color: #dc2626;
+}
+
+.unauthorizedMessage {
+  color: #dc2626;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 2rem;
 }
