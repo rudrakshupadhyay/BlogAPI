@@ -50,7 +50,7 @@ export const createAdminRequest = [
         },
       });
 
-      const reviewUrl = `${config.ORIGIN}/pending-requests`;
+      const reviewUrl = `${config.ADMIN_ORIGIN}/pending-requests`;
 
       try {
         await sendAdminRequestEmail({

@@ -17,8 +17,12 @@ if (!process.env.ADMIN_PASSWORD) {
     throw new Error("ADMIN_PASSWORD is not defined in environment variables");
 }
 
-if (!process.env.ORIGIN) {
-    throw new Error("ORIGIN is not defined in environment variables");
+if (!process.env.READER_ORIGIN) {
+    throw new Error("READER_ORIGIN is not defined in environment variables");
+}
+
+if (!process.env.ADMIN_ORIGIN) {
+    throw new Error("ADMIN_ORIGIN is not defined in environment variables");
 }
 
 if (!process.env.RESEND_API_KEY) {
@@ -38,7 +42,8 @@ const config = {
     JWT_SECRET: process.env.JWT_SECRET,
     PORT: process.env.PORT,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
-    ORIGIN: process.env.ORIGIN,
+    READER_ORIGIN: process.env.READER_ORIGIN,
+    ADMIN_ORIGIN: process.env.ADMIN_ORIGIN,
     READER_PASSWORD: process.env.READER_PASSWORD,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     OWNER_EMAIL: process.env.OWNER_EMAIL,

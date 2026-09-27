@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: config.ORIGIN,
+    origin: [config.READER_ORIGIN, config.ADMIN_ORIGIN],
     credentials: true,
   }),
 );
