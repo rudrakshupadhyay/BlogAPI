@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma.js";
 import { validatePost } from "../utils/validate.js";
 import { validationResult, matchedData } from "express-validator";
 import generateUniqueSlug from "../utils/generateSlug.js";
+import { sanitizeHtml } from "../utils/sanitizeHtml.js";
 
 export async function getPublishedPosts(req, res) {
   try {
@@ -104,6 +105,12 @@ export async function getPostBySlug(req, res) {
       });
     }
 
+    if (!post.published && post.authorId !== req.user.id) {
+      return res.status(403).json({
+        message: "You are not authorized to view this post",
+      });
+    }
+
     res.status(200).json({
       post,
     });
@@ -125,12 +132,12 @@ export const createPost = [
     }
 
     const { title, content, published, featured } = matchedData(req);
-
+    const sanitizedContent = content ? sanitizeHtml(content) : null;
     try {
       const post = await prisma.post.create({
         data: {
           title,
-          content,
+          content: sanitizedContent,
           slug: await generateUniqueSlug(title),
           published,
           featured,
@@ -163,6 +170,12 @@ export async function deletePostBySlug(req, res) {
       return res.status(404).json({ message: "Post not found" });
     }
 
+    if (post.authorId !== req.user.id && req.user.role !== "OWNER") {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to delete this post" });
+    }
+
     const newPost = await prisma.post.delete({
       where: { slug },
     });
@@ -189,6 +202,8 @@ export const updatePostBySlug = [
 
     const { slug } = req.params;
     const { title, content, published, featured } = matchedData(req);
+    const sanitizedContent = content ? sanitizeHtml(content) : null;
+
     try {
       const post = await prisma.post.findUnique({
         where: { slug },
@@ -198,13 +213,30 @@ export const updatePostBySlug = [
         return res.status(404).json({ message: "Post not found" });
       }
 
+      if (post.authorId !== req.user.id && req.user.role !== "OWNER") {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to update this post" });
+      }
+
+      let publishedAt = post.publishedAt;
+
+      if (!post.published && published) {
+        publishedAt = new Date();
+      }
+
+      if (post.published && !published) {
+        publishedAt = null;
+      }
+
       const updatedPost = await prisma.post.update({
         where: { slug },
         data: {
           title,
-          content,
+          content: sanitizedContent,
           published,
           featured,
+          publishedAt,
         },
       });
 
@@ -350,7 +382,6 @@ export async function getMyFeaturedPosts(req, res) {
         hasPreviousPage: page > 1,
       },
     });
-    
   } catch (error) {
     console.error("Error fetching user's featured posts:", error);
 

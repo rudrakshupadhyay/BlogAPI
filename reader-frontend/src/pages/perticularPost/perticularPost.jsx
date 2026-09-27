@@ -37,6 +37,7 @@ function Footer() {
 }
 
 function PostUI({ post, setPost }) {
+  const { user } = useAuth();
   return (
     <main className={styles.post}>
       <section className={styles.postCard}>
@@ -62,7 +63,9 @@ function PostUI({ post, setPost }) {
           className={styles.postContent}
           dangerouslySetInnerHTML={{ __html: post.content }}
         ></div>
-        <Comments comments={post.comments} post={post} setPost={setPost} />
+        {user && (
+          <Comments comments={post.comments} post={post} setPost={setPost} />
+        )}
       </section>
       <Footer />
     </main>

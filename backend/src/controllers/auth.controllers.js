@@ -121,12 +121,17 @@ export async function getMe(req, res) {
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
-  const decoded = jwt.verify(token, config.JWT_SECRET);
-  const user = await prisma.user.findUnique({ where: { id: decoded.id } });
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ user });
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    res.status(401).json({ message: "Invalid token" });
   }
-  res.json({ user });
 }
 
 export async function refreshToken(req, res) {
@@ -134,87 +139,105 @@ export async function refreshToken(req, res) {
   if (!refreshToken) {
     return res.status(401).json({ message: "No refresh token provided" });
   }
-  const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
-  const refreshTokenHash = crypto
-    .createHash("sha256")
-    .update(refreshToken)
-    .digest("hex");
+  try {
+    const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
 
-  const session = await prisma.session.findFirst({
-    where: { refreshTokenHash, revoked: false },
-  });
+    const session = await prisma.session.findFirst({
+      where: { refreshTokenHash, revoked: false },
+    });
 
-  if (!session) {
-    return res.status(401).json({ message: "Invalid refresh token" });
+    if (!session) {
+      return res.status(401).json({ message: "Invalid refresh token" });
+    }
+
+    const accessToken = jwt.sign(
+      { id: decoded.id, sessionId: session.id },
+      config.JWT_SECRET,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    const newRefreshToken = jwt.sign({ id: decoded.id }, config.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    const newRefreshTokenHash = crypto
+      .createHash("sha256")
+      .update(newRefreshToken)
+      .digest("hex");
+
+    await prisma.session.update({
+      where: { id: session.id },
+      data: { refreshTokenHash: newRefreshTokenHash },
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    res.json({ message: "Access Token refreshed successfully", accessToken });
+  } catch (error) {
+    console.error("Error refreshing access token:", error);
+    res.status(401).json({ message: "Invalid refresh token" });
   }
-
-  const accessToken = jwt.sign(
-    { id: decoded.id, sessionId: session.id },
-    config.JWT_SECRET,
-    {
-      expiresIn: "15m",
-    },
-  );
-  const newRefreshToken = jwt.sign({ id: decoded.id }, config.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-  const newRefreshTokenHash = crypto
-    .createHash("sha256")
-    .update(newRefreshToken)
-    .digest("hex");
-
-  await prisma.session.update({
-    where: { id: session.id },
-    data: { refreshTokenHash: newRefreshTokenHash },
-  });
-  res.cookie("refreshToken", newRefreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
-  res.json({ message: "Access Token refreshed successfully", accessToken });
 }
 
 export async function logout(req, res) {
-  const { refreshToken } = req.cookies;
-  if (!refreshToken) {
-    return res.status(401).json({ message: "No refresh token provided" });
-  }
-  const refreshTokenHash = crypto
-    .createHash("sha256")
-    .update(refreshToken)
-    .digest("hex");
-  const session = await prisma.session.findFirst({
-    where: { refreshTokenHash, revoked: false },
-  });
+  try {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "No refresh token provided" });
+    }
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+    const session = await prisma.session.findFirst({
+      where: { refreshTokenHash, revoked: false },
+    });
 
-  if (!session) {
-    return res.status(401).json({ message: "Invalid refresh token" });
-  }
+    if (!session) {
+      return res.status(401).json({ message: "Invalid refresh token" });
+    }
 
-  await prisma.session.update({
-    where: { id: session.id },
-    data: { revoked: true },
-  });
-  res.clearCookie("refreshToken");
-  res.json({
-    message: "Logged out successfully",
-  });
+    await prisma.session.update({
+      where: { id: session.id },
+      data: { revoked: true },
+    });
+    res.clearCookie("refreshToken");
+    res.json({
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Error during logout:", error);
+    res.status(500).json({ message: "Failed to logout" });
+  }
 }
 
 export async function logoutAll(req, res) {
-  const { refreshToken } = req.cookies;
-  if (!refreshToken) {
-    return res.status(401).json({ message: "No refresh token provided" });
+  try {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "No refresh token provided" });
+    }
+    const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
+    await prisma.session.updateMany({
+      where: { userId: decoded.id, revoked: false },
+      data: { revoked: true },
+    });
+    res.clearCookie("refreshToken");
+    res.json({
+      message: "Logged out of all sessions successfully",
+    });
+  } catch (error) {
+    console.error("Error during logout from all sessions:", error);
+    res.status(500).json({ message: "Failed to logout from all sessions" });
   }
-  const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
-  await prisma.session.updateMany({
-    where: { userId: decoded.id, revoked: false },
-    data: { revoked: true },
-  });
-  res.clearCookie("refreshToken");
-  res.json({
-    message: "Logged out of all sessions successfully",
-  });
 }

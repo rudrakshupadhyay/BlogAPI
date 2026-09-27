@@ -45,17 +45,18 @@ function CommentActions({ onEdit, onDelete }) {
   );
 }
 
-
 function CreateComment({ postId, setCreatingComment, setPost }) {
   // Logic to create a comment goes here
   const [commentContent, setCommentContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createCommentError, setCreateCommentError] = useState(null);
   const { user, accessToken, refreshAccessToken } = useAuth();
   function handleChange(event) {
     setCommentContent(event.target.value);
   }
 
   async function handleSubmit() {
+    setCreateCommentError(null);
     setIsSubmitting(true);
     try {
       let response = await createComment(postId, commentContent, accessToken);
@@ -69,7 +70,9 @@ function CreateComment({ postId, setCreatingComment, setPost }) {
       }
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to create comment");
+        throw new Error(
+          data.message || data.error || "Failed to create comment",
+        );
       }
       setCommentContent("");
       // Update the post with the new comment
@@ -87,6 +90,9 @@ function CreateComment({ postId, setCreatingComment, setPost }) {
       }));
     } catch (error) {
       console.error("Error creating comment:", error);
+      setCreateCommentError(
+        error.message || error.error || "Failed to create comment",
+      );
     } finally {
       setCreatingComment(false);
       setIsSubmitting(false);
@@ -94,6 +100,9 @@ function CreateComment({ postId, setCreatingComment, setPost }) {
   }
   return (
     <div className={styles.createCommentContainer}>
+      {createCommentError && (
+        <p className={styles.errorMessage}>{createCommentError}</p>
+      )}
       <textarea
         placeholder="Write a comment..."
         onChange={handleChange}
@@ -115,8 +124,6 @@ function Comments({ comments, post, setPost }) {
   const [creatingComment, setCreatingComment] = useState(false);
   const [editingComment, setEditingComment] = useState(null);
   const { user, accessToken, refreshAccessToken } = useAuth();
-
-
 
   async function handleDeleteComment(commentId) {
     try {

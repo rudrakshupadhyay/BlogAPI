@@ -12,6 +12,10 @@ function generateSlug(title) {
 async function generateUniqueSlug(title) {
   const baseSlug = generateSlug(title);
 
+  if (baseSlug.length === 0) {
+    baseSlug = "post";
+  }
+  
   let slug = baseSlug;
   let counter = 2;
 

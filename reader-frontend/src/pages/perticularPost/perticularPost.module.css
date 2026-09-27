@@ -64,7 +64,7 @@
   border-top: 1px solid #e2e8f0;
 }
 
-.errorContainer{
+.errorContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,7 +92,9 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s;
 }
 
 .backLogin:hover {
@@ -116,7 +118,8 @@
   margin-top: 1rem;
 }
 
-.githubLink, .linkedinLink {
+.githubLink,
+.linkedinLink {
   color: #475569;
   transition: color 0.3s ease;
 }

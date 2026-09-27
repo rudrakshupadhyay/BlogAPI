@@ -6,12 +6,15 @@ import { useAuth } from "../../context/AuthContext.jsx";
 function EditComment({ comment, setEditingComment, setPost }) {
   const [commentContent, setCommentContent] = useState(comment.content);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editCommentError, setEditCommentError] = useState(null);
   const { user, accessToken, refreshAccessToken } = useAuth();
+
   function handleChange(event) {
     setCommentContent(event.target.value);
   }
 
   async function handleSubmit() {
+    setEditCommentError(null);
     setIsSubmitting(true);
     try {
       console.log("Updating comment:", commentContent);
@@ -22,7 +25,9 @@ function EditComment({ comment, setEditingComment, setPost }) {
       }
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to update comment");
+        throw new Error(
+          data.message || data.error || "Failed to update comment",
+        );
       }
       setCommentContent("");
       // Update the post with the updated comment
@@ -34,6 +39,9 @@ function EditComment({ comment, setEditingComment, setPost }) {
       }));
     } catch (error) {
       console.error("Error updating comment:", error);
+      setEditCommentError(
+        error.message || error.error || "Failed to update comment",
+      );
     } finally {
       setEditingComment(null);
       setIsSubmitting(false);
@@ -42,6 +50,9 @@ function EditComment({ comment, setEditingComment, setPost }) {
 
   return (
     <div className={styles.createCommentContainer}>
+      {editCommentError && (
+        <p className={styles.errorMessage}>{editCommentError}</p>
+      )}
       <textarea
         placeholder="Write a comment..."
         onChange={handleChange}
