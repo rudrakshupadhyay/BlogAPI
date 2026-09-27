@@ -10,7 +10,7 @@ function generateSlug(title) {
 }
 
 async function generateUniqueSlug(title) {
-  const baseSlug = generateSlug(title);
+  let baseSlug = generateSlug(title);
 
   if (baseSlug.length === 0) {
     baseSlug = "post";

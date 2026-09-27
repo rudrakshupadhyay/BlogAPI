@@ -9,7 +9,17 @@ export const createComment = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { content, postId } = matchedData(req);
+    const { content } = matchedData(req);
+    const postId = req.params.postId;
+
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
     const authorId = req.user.id;
     const comment = await prisma.comment.create({
       data: {
@@ -54,6 +64,11 @@ export async function deleteComment(req, res) {
 export async function updateComment(req, res) {
   const commentId = req.params.commentId;
   const content = req.body.content;
+  
+  if (!content || content.trim() === "") {
+    return res.status(400).json({ message: "Content is required" });
+  }
+  
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
   });

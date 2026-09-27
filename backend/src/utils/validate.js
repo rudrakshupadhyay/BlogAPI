@@ -45,20 +45,6 @@ export const validateComment = [
     .withMessage("Content is required")
     .isLength({ min: 1, max: 500 })
     .withMessage("Content must be between 1 and 500 characters"),
-
-  body("postId")
-    .notEmpty()
-    .withMessage("Post ID is required")
-    .isUUID()
-    .withMessage("Post ID must be a valid UUID")
-    .custom(async (value) => {
-      const post = await prisma.post.findUnique({
-        where: { id: value },
-      });
-      if (!post) {
-        throw new Error("Post not found");
-      }
-    }),
 ];
 
 export const validateAdminRequest = [

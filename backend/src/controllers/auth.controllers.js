@@ -190,11 +190,11 @@ export async function refreshToken(req, res) {
 }
 
 export async function logout(req, res) {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
   try {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
-    }
     const refreshTokenHash = crypto
       .createHash("sha256")
       .update(refreshToken)
@@ -222,11 +222,11 @@ export async function logout(req, res) {
 }
 
 export async function logoutAll(req, res) {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
   try {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
-    }
     const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
     await prisma.session.updateMany({
       where: { userId: decoded.id, revoked: false },
