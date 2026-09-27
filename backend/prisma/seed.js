@@ -1,66 +1,38 @@
+// backend/prisma/seed.js
 import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 import config from "../src/config/config.js";
-import posts from "./samplePosts.js";
-async function main() {
-  const password = await bcrypt.hash(config.ADMIN_PASSWORD, 10);
+import { seedUsers } from "./seed-functions/seedUsers.js";
+import { seedPosts } from "./seed-functions/seedPosts.js";
+import { seedComments } from "./seed-functions/seedComments.js";
+import { seedAdminRequests } from "./seed-functions/seedAdminRequests.js";
 
-  const owner = await prisma.user.create({
-    data: {
-      username: "writely",
-      name: "Writely Owner",
-      password,
+async function main() {
+  const passwordHash = await bcrypt.hash(config.ADMIN_PASSWORD, 10);
+
+  const owner = await prisma.user.upsert({
+    where: { username: "owner.alex" },
+    update: { name: "Alex Morgan", password: passwordHash, role: "OWNER" },
+    create: {
+      username: "owner.alex",
+      name: "Alex Morgan",
+      password: passwordHash,
       role: "OWNER",
     },
   });
 
-  const admin = await prisma.user.create({
-    data: {
-      username: "admin",
-      name: "Admin User",
-      password,
-      role: "ADMIN",
-    },
-  });
+  await seedUsers();
+  await seedPosts();
+  await seedComments();
+  await seedAdminRequests();
 
-  const user = await prisma.user.create({
-    data: {
-      username: "john",
-      name: "John Doe",
-      password,
-      role: "READER",
-    },
-  });
-
-  let createdPostId;
-
-  for (const post of posts) {
-    const createdPost = await prisma.post.create({
-      data: {
-        ...post,
-        publishedAt: post.published ? new Date() : null,
-        authorId: admin.id,
-      },
-    });
-
-    if (!createdPostId) {
-      createdPostId = createdPost.id;
-    }
-  }
-
-  await prisma.comment.create({
-    data: {
-      content: "Great post!",
-      postId: createdPostId,
-      authorId: user.id,
-    },
-  });
-  console.log("Database seeded successfully.");
+  console.log("Database seed completed successfully.");
+  console.log(`Owner exists: ${owner.username}`);
 }
 
 main()
   .catch((error) => {
-    console.error(error);
+    console.error("Seed failed:", error);
     process.exit(1);
   })
   .finally(async () => {
