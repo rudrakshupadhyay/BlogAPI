@@ -65,10 +65,10 @@ export async function updateComment(req, res) {
   const commentId = req.params.commentId;
   const content = req.body.content;
   
-  if (!content || content.trim() === "") {
-    return res.status(400).json({ message: "Content is required" });
+  if (!content || content.trim() === "" || content.length > 500) {
+    return res.status(400).json({ message: "Content is required and must be between 1 and 500 characters" });
   }
-  
+
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
   });
