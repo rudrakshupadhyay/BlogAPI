@@ -1,0 +1,30 @@
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.loginLink {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.loginLink:hover {
+  color: darkblue;
+}
+
+.loginLink:focus {
+  outline: none;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 255, 0.5);
+}
+
+.loginLink:active {
+  color: navy;
+}

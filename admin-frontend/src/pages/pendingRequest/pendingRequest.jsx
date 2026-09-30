@@ -1,6 +1,7 @@
 import { useAuth } from "../../context/AuthContext.jsx";
 import styles from "./pendingRequest.module.css";
 import PendingRequestList from "../../components/pendingRequestList/pendingRequestList.jsx";
+import { Link } from "react-router";
 function PendingRequestPage() {
   const { user, loading } = useAuth();
   return (
@@ -12,11 +13,16 @@ function PendingRequestPage() {
       ) : !user ? (
         <div className={styles.errorMessage}>
           <p>Please log in to view your pending requests.</p>
+          <Link to="/login" className={styles.loginLink}>
+            Go to Login
+          </Link>
         </div>
       ) : user.role === "OWNER" ? (
         <PendingRequestList />
       ) : (
-        <div>Only owners can view pending requests.</div>
+        <div className={styles.errorMessage}>
+          Only owners can view pending requests.
+        </div>
       )}
     </div>
   );
