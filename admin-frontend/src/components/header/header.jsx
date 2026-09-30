@@ -58,6 +58,18 @@ function Header() {
                 Your Posts
               </NavLink>
             </li>
+            {user.role === "OWNER" && (
+              <li>
+                <NavLink
+                  to="/pending-requests"
+                  className={({ isActive }) =>
+                    isActive ? styles.active : styles.navLink
+                  }
+                >
+                  Pending Requests
+                </NavLink>
+              </li>
+            )}
             {user ? (
               <li>
                 <button onClick={handleLogout} className={styles.logout}>
