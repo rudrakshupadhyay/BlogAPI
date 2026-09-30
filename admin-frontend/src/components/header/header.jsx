@@ -1,12 +1,15 @@
 import { NavLink, Link } from "react-router";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./header.module.css";
+import { useNavigate } from "react-router";
 function Header() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   function handleLogout() {
     try {
       logout();
+      navigate("/");
     } catch (error) {
       console.error("Error occurred while logging out:", error);
     }
