@@ -68,33 +68,60 @@ Writely separates the public reading experience from the author/admin workspace 
 Writely is organized as three independently configured applications:
 
 ```text
-                    ┌─────────────────────────┐
-                    │     Reader Frontend     │
-                    │      React + Vite       │
-                    └────────────┬────────────┘
-                                 │
-                                 │ REST API
-                                 ▼
-                    ┌─────────────────────────┐
-                    │       Backend API        │
-                    │ Express + JWT + Prisma   │
-                    └────────────┬────────────┘
-                                 │
-                                 │ Prisma
-                                 ▼
-                    ┌─────────────────────────┐
-                    │     PostgreSQL / Neon    │
-                    └─────────────────────────┘
-                                 ▲
-                                 │ Prisma
-                    ┌────────────┴────────────┐
-                    │                         │
-                    │ REST API                │
-                    │                         │
-          ┌─────────┴──────────┐
-          │   Admin Frontend   │
-          │    React + Vite    │
-          └────────────────────┘
+                                  ┌──────────────────────────┐
+                                  │      Reader Frontend     │
+                                  │       React + Vite       │
+                                  │                          │
+                                  │ • Browse published posts │
+                                  │ • Search / pagination    │
+                                  │ • Authentication         │
+                                  │ • Comments               │
+                                  └────────────┬─────────────┘
+                                               │
+                                               │ REST API
+                                               │ JWT Access Token
+                                               │ HTTP-only Cookie
+                                               ▼
+┌──────────────────────────┐       ┌──────────────────────────┐
+│     Admin Frontend       │       │       Backend API        │
+│       React + Vite       │       │     Express + Node.js    │
+│                          │       │                          │
+│ • Dashboard              │ REST  │ • Authentication         │
+│ • Create / edit posts    ├──────►│ • JWT / Sessions         │
+│ • Post statistics        │ API   │ • RBAC                   │
+│ • Featured posts         │       │ • Posts                  │
+│ • Admin requests         │       │ • Comments               │
+│ • Rich text editor       │       │ • Admin requests         │
+└──────────────────────────┘       │ • Input validation       │
+                                   │ • HTML sanitization      │
+                                   └────────────┬─────────────┘
+                                                │
+                                                │ Prisma ORM
+                                                ▼
+                                   ┌──────────────────────────┐
+                                   │     PostgreSQL / Neon    │
+                                   │                          │
+                                   │ • Users                  │
+                                   │ • Sessions               │
+                                   │ • Posts                  │
+                                   │ • Comments               │
+                                   │ • Admin Requests         │
+                                   └──────────────────────────┘
+                                               
+                                               
+                                   ┌──────────────────────────┐
+                                   │      Resend Email API    │
+                                   │                          │
+                                   │ • Admin request emails   │
+                                   │ • Owner notifications    │
+                                   └────────────▲─────────────┘
+                                                │
+                                                │ HTTPS API
+                                                │
+                                   ┌────────────┴─────────────┐
+                                   │       Backend API        │
+                                   │     Email Service        │
+                                   └──────────────────────────┘
 ```
 
 ### Application responsibilities
