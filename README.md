@@ -63,65 +63,92 @@ Writely separates the public reading experience from the author/admin workspace 
 - Post HTML sanitization using DOMPurify + JSDOM
 - Admin-request email notifications through Resend
 
+## Screenshots
+
+### Reader Frontend
+
+![Reader Home](docs/screenshots/reader-home.png)
+
+![Post List](docs/screenshots/post-list.png)
+
+![Perticuler Post](docs/screenshots/perticuler-post.png)
+
+![Comments](docs/screenshots/comments.png)
+
+### Admin Frontend
+
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+
+![Post Editor](docs/screenshots/post-editor.png)
+
+![Admin Requests](docs/screenshots/admin-requests.png)
+
+![Your Posts](docs/screenshots/your-posts.png)
+
+## Demo Video
+
+[![Writely Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](YOUR_YOUTUBE_URL)
+
+A short walkthrough of the application covering authentication, post management, comments, and the admin workflow.
+
 ## Architecture
 
 Writely is organized as three independently configured applications:
 
 ```text
-                                  ┌──────────────────────────┐
-                                  │      Reader Frontend     │
-                                  │       React + Vite       │
-                                  │                          │
-                                  │ • Browse published posts │
-                                  │ • Search / pagination    │
-                                  │ • Authentication         │
-                                  │ • Comments               │
-                                  └────────────┬─────────────┘
-                                               │
-                                               │ REST API
-                                               │ JWT Access Token
-                                               │ HTTP-only Cookie
-                                               ▼
-┌──────────────────────────┐       ┌──────────────────────────┐
-│     Admin Frontend       │       │       Backend API        │
-│       React + Vite       │       │     Express + Node.js    │
-│                          │       │                          │
-│ • Dashboard              │ REST  │ • Authentication         │
-│ • Create / edit posts    ├──────►│ • JWT / Sessions         │
-│ • Post statistics        │ API   │ • RBAC                   │
-│ • Featured posts         │       │ • Posts                  │
-│ • Admin requests         │       │ • Comments               │
-│ • Rich text editor       │       │ • Admin requests         │
-└──────────────────────────┘       │ • Input validation       │
-                                   │ • HTML sanitization      │
-                                   └────────────┬─────────────┘
-                                                │
-                                                │ Prisma ORM
-                                                ▼
-                                   ┌──────────────────────────┐
-                                   │     PostgreSQL / Neon    │
-                                   │                          │
-                                   │ • Users                  │
-                                   │ • Sessions               │
-                                   │ • Posts                  │
-                                   │ • Comments               │
-                                   │ • Admin Requests         │
-                                   └──────────────────────────┘
-                                               
-                                               
-                                   ┌──────────────────────────┐
-                                   │      Resend Email API    │
-                                   │                          │
-                                   │ • Admin request emails   │
-                                   │ • Owner notifications    │
-                                   └────────────▲─────────────┘
-                                                │
-                                                │ HTTPS API
-                                                │
-                                   ┌────────────┴─────────────┐
-                                   │       Backend API        │
-                                   │     Email Service        │
-                                   └──────────────────────────┘
+                              WRITELY ARCHITECTURE
+
+       ┌─────────────────────────┐       ┌─────────────────────────┐
+       │     Reader Frontend     │       │     Admin Frontend      │
+       │       React + Vite      │       │       React + Vite      │
+       │                         │       │                         │
+       │ • Public posts          │       │ • Dashboard             │
+       │ • Search & pagination   │       │ • Create / edit posts   │
+       │ • Authentication        │       │ • Statistics            │
+       │ • Comments              │       │ • Featured posts        │
+       │                         │       │ • Admin requests        │
+       │                         │       │ • Rich text editor      │
+       └────────────┬────────────┘       └────────────┬────────────┘
+                    │                                 │
+                    │          REST API               │
+                    │                                 │
+                    │  JWT Access Token               │
+                    │  HTTP-only Refresh Cookie       │
+                    │                                 │
+                    └───────────────┬─────────────────┘
+                                    │
+                                    ▼
+                    ┌──────────────────────────────┐
+                    │          Backend API         │
+                    │       Node.js + Express      │
+                    │                              │
+                    │ • Authentication & Sessions  │
+                    │ • JWT Access / Refresh       │
+                    │ • Role-Based Access Control  │
+                    │ • Posts & Comments           │
+                    │ • Admin Request Workflow     │
+                    │ • Validation & Sanitization  │
+                    └──────────────┬───────────────┘
+                                   │
+                                   │ Prisma ORM
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │       PostgreSQL / Neon      │
+                    │                              │
+                    │ • Users                      │
+                    │ • Sessions                   │
+                    │ • Posts                      │
+                    │ • Comments                   │
+                    │ • Admin Requests             │
+                    └──────────────────────────────┘
+                                   │
+                                   │
+                    ┌──────────────▼───────────────┐
+                    │        Resend Email API      │
+                    │                              │
+                    │ • Admin request notification │
+                    │ • Owner email                │
+                    └──────────────────────────────┘
 ```
 
 ### Application responsibilities
@@ -416,7 +443,7 @@ The public post-list endpoint accepts pagination and search parameters, includin
 | `GET` | `/admin-request` | `OWNER` | Retrieve pending requests |
 | `PATCH` | `/admin-request/:requestId` | `OWNER` | Approve or reject a request |
 
-## Frontend Structure
+## Project Structure
 
 The repository contains three independently configured applications rather than a root-level workspace.
 
@@ -652,7 +679,7 @@ https://blogapi-1-nzcm.onrender.com
 **URL:**
 
 ```text
-https://admin-frontend-xzbz.onrender.com
+https://admin-frontend-zxbz.onrender.com
 ```
 
 **Root Directory:**
@@ -704,7 +731,7 @@ https://blogapi-mpfp.onrender.com
 The admin application follows the same backend path:
 
 ```text
-https://admin-frontend-xzbz.onrender.com
+https://admin-frontend-zxbz.onrender.com
                 │
                 ▼
       Render Static Site
