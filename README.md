@@ -867,7 +867,7 @@ https://github.com/rudrakshupadhyay/BlogAPI
 
 ## License
 
-This project currently uses the license metadata present in the backend package configuration (`ISC`). No separate repository-level `LICENSE` file was found.
+Educational portfolio project by Rudraksh Upadhyay.
 
 ---
 
