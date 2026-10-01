@@ -9,7 +9,7 @@ Writely separates the public reading experience from the author/admin workspace 
 | Application | URL |
 |---|---|
 | Reader | https://blogapi-1-nzcm.onrender.com |
-| Admin | https://admin-frontend-xzbz.onrender.com |
+| Admin | https://admin-frontend-zxbz.onrender.com |
 | Backend API | https://blogapi-mpfp.onrender.com |
 
 > The Reader and Admin applications are separate React SPAs backed by the same Express API and PostgreSQL database.
