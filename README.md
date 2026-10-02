@@ -87,7 +87,7 @@ Writely separates the public reading experience from the author/admin workspace 
 
 ## Demo Video
 
-[![Writely Demo](https://img.youtube.com/vi/lAhPM_L8tRk/maxresdefault.jpg)](https://youtu.be/lAhPM_L8tRk)
+[![Writely Demo](https://img.youtube.com/vi/2MoPpXM6gwU/maxresdefault.jpg)](https://youtu.be/2MoPpXM6gwU)
 
 A short walkthrough of the application covering authentication, post management, comments, and the admin workflow.
 
